@@ -5,26 +5,32 @@ from . import board as board_mod
 
 W, H = 1080, 1920
 
+PALETTES = {
+    'teal': {'bg': 'var(--bg)', 'bg2': 'var(--bg2)', 'a1': 'var(--a1)', 'a2': 'var(--a2)', 'a3': 'var(--a3)'},
+    'violet': {'bg': '#0A0614', 'bg2': '#1B0B33', 'a1': '#C6F432', 'a2': '#8B5CF6', 'a3': '#FF5DB1'},
+    'amber': {'bg': '#0C0703', 'bg2': '#2A1405', 'a1': '#FFC24B', 'a2': '#FF6B3D', 'a3': '#7CE0C3'},
+}
+
 CSS = r"""
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:__W__px;height:__H__px;overflow:hidden;background:#040A0F;
+html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
   font-family:'DejaVu Sans',sans-serif;color:#E8FBFF}
 #stage{position:relative;width:__W__px;height:__H__px;overflow:hidden;
-  background:radial-gradient(80% 55% at 50% 20%,#0A2230 0%,#061018 55%,#03070B 100%)}
+  background:radial-gradient(80% 55% at 50% 20%,var(--bg2) 0%,#061018 55%,#03070B 100%)}
 .scene{position:absolute;inset:0;opacity:0}
 .glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45}
-#g1{width:620px;height:620px;left:-170px;top:170px;background:#00E0B8}
-#g2{width:540px;height:540px;right:-170px;top:760px;background:#FFB020}
-#g3{width:500px;height:500px;left:220px;bottom:-150px;background:#2B6CFF}
+#g1{width:620px;height:620px;left:-170px;top:170px;background:var(--a1)}
+#g2{width:540px;height:540px;right:-170px;top:760px;background:var(--a2)}
+#g3{width:500px;height:500px;left:220px;bottom:-150px;background:var(--a3)}
 .brand{position:absolute;left:70px;top:196px;font-size:72px;font-weight:800;letter-spacing:.03em;color:#E8FBFF}
 .brand.sm{top:200px;font-size:46px;color:#BFE6EF;font-weight:700}
 .kicker{position:absolute;left:70px;top:150px;font-size:24px;letter-spacing:.32em;
-  color:#00E0B8;text-transform:uppercase}
+  color:var(--a1);text-transform:uppercase}
 #prog{position:absolute;left:40px;right:40px;top:44px;height:8px;display:flex;gap:10px;z-index:9}
 .seg{flex:1;background:rgba(255,255,255,.14);border-radius:6px;overflow:hidden}
-.segfill{height:100%;width:0;background:linear-gradient(90deg,#00E0B8,#FFB020)}
+.segfill{height:100%;width:0;background:linear-gradient(90deg,var(--a1),var(--a2))}
 .hnum{position:absolute;left:0;right:0;top:560px;text-align:center;font-size:290px;
-  font-weight:800;line-height:1;color:#FFB020;text-shadow:0 0 110px rgba(255,176,32,.5)}
+  font-weight:800;line-height:1;color:var(--a2);text-shadow:0 0 110px rgba(255,176,32,.5)}
 .hunit{position:absolute;left:0;right:0;top:910px;text-align:center;font-size:48px;color:#E8FBFF}
 .htag{position:absolute;left:50%;margin-left:-300px;top:1035px;width:600px;text-align:center;
   padding:18px 0;border:3px solid #FF4B5C;border-radius:16px;color:#FF4B5C;font-size:31px;font-weight:700;white-space:nowrap}
@@ -37,7 +43,7 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:#040A0F;
 #cap{position:absolute;left:60px;right:60px;bottom:130px;text-align:center;font-size:38px;
   line-height:1.25;text-shadow:0 3px 20px rgba(0,0,0,.9)}
 .vscore{position:absolute;left:0;right:0;top:520px;text-align:center;font-size:300px;
-  font-weight:800;line-height:1;color:#00E0B8;text-shadow:0 0 120px rgba(0,224,184,.45)}
+  font-weight:800;line-height:1;color:var(--a1);text-shadow:0 0 120px rgba(0,224,184,.45)}
 .vnote{position:absolute;left:80px;right:80px;top:930px;text-align:center;font-size:40px;color:#8FD9E8}
 .fhead{position:absolute;left:0;right:0;top:560px;text-align:center;font-size:66px;font-weight:800;
   color:#FF4B5C;text-shadow:0 0 70px rgba(255,75,92,.45)}
@@ -47,6 +53,12 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:#040A0F;
   color:#FFFFFF;letter-spacing:-.02em;text-shadow:0 0 70px rgba(0,224,184,.75),0 0 160px rgba(43,108,255,.4)}
 .ghost{position:absolute;left:0;right:0;top:1300px;text-align:center;font-size:170px;font-weight:800;letter-spacing:.02em;white-space:nowrap;color:rgba(0,224,184,.10)}
 .ghostline{position:absolute;left:340px;right:340px;top:1260px;height:2px;background:rgba(0,224,184,.18)}
+.rail{position:absolute;left:206px;top:560px;width:4px;height:0;background:var(--a1);opacity:.35}
+.stepc{position:absolute;left:148px;width:120px;height:120px;border-radius:50%;border:4px solid var(--a1);
+  display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:800;color:var(--a1);
+  background:rgba(4,10,15,.65)}
+.stept{position:absolute;left:312px;right:70px;font-size:46px;font-weight:700;line-height:1.15}
+.stepd{position:absolute;left:314px;right:70px;font-size:30px;color:#8FD9E8;line-height:1.25}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
 """
 
@@ -70,9 +82,13 @@ const cap=document.getElementById('cap');
 const segs=[].slice.call(document.querySelectorAll('.segfill'));
 const LOOP=0.5;
 
-function numText(v,isFloat){return isFloat? v.toFixed(2).replace('.',',') : String(Math.round(v));}
+function numText(v,isFloat){return isFloat? String(parseFloat(v.toFixed(2))).replace('.',',') : String(Math.round(v));}
 
 window.setTime=function(t){
+  const g1=document.getElementById('g1'), g2=document.getElementById('g2'), g3=document.getElementById('g3');
+  if(g1){ g1.style.transform='translate('+(40*Math.sin(t*0.45)).toFixed(1)+'px,'+(60*Math.cos(t*0.37)).toFixed(1)+'px)'; }
+  if(g2){ g2.style.transform='translate('+(-50*Math.sin(t*0.32+1)).toFixed(1)+'px,'+(40*Math.sin(t*0.5)).toFixed(1)+'px)'; }
+  if(g3){ g3.style.transform='translate('+(30*Math.cos(t*0.41+2)).toFixed(1)+'px,'+(-45*Math.sin(t*0.28)).toFixed(1)+'px)'; }
   const looping = t >= TOTAL - LOOP;
   SCENES.forEach(function(s,i){
     const el=document.getElementById('sc'+i);
@@ -117,6 +133,17 @@ window.setTime=function(t){
       el.textContent=(s.score*p).toFixed(1).replace('.',',');
       el.style.opacity=p;
       document.getElementById('s'+i+'u').style.opacity=ease((lt-0.35)/0.45);
+    } else if(s.kind==='steps'){
+      const rail=document.getElementById('s'+i+'rail');
+      if(rail) rail.style.height=(Math.min(1, lt/1.2)*((s.items.length-1)*330+60)).toFixed(0)+'px';
+      s.items.forEach(function(it,k){
+        const p=ease((lt-0.1-k*0.45)/0.45);
+        const c=document.getElementById('s'+i+'c'+k);
+        c.style.opacity=p;
+        c.style.transform='scale('+(0.65+0.35*p).toFixed(3)+')';
+        document.getElementById('s'+i+'t'+k).style.opacity=p;
+        document.getElementById('s'+i+'d'+k).style.opacity=p;
+      });
     } else if(s.kind==='board'){
       boardFrame(i, lt, s.end-s.start);
     } else if(s.kind==='final'){
@@ -180,6 +207,20 @@ def build(spec, cues, path):
                                          note=_esc(sc.data.get('note', '')))
             m = m.replace('<div class="vscore"', f'<div class="brand sm">{_esc(spec.title.upper())}</div><div class="vscore"', 1)
             m += f'<div class="ghost">{_esc(spec.title.upper())}</div>'
+        elif sc.kind == 'steps':
+            items = sc.data.get('items', [])[:4]
+            parsed = [{'title': it.get('title', ''), 'text': it.get('text', '')} for it in items]
+            scenes_js[-1]['items'] = parsed
+            top = sc.data.get('top', 560)
+            step = sc.data.get('gap', 330)
+            parts = ['<div class="kicker">%s</div>' % _esc(spec.kicker),
+                     f'<div class="rail" id="s{i}rail"></div>']
+            for k, it in enumerate(items):
+                y = top + k * step
+                parts.append(f'<div class="stepc" id="s{i}c{k}" style="top:{y}px;left:148px">{k + 1}</div>'
+                             f'<div class="stept" id="s{i}t{k}" style="top:{y + 8}px">{_esc(it.get("title", ""))}</div>'
+                             f'<div class="stepd" id="s{i}d{k}" style="top:{y + 66}px">{_esc(it.get("text", ""))}</div>')
+            m = ''.join(parts)
         elif sc.kind == 'board':
             m = board_mod.markup(i, sc)
         elif sc.kind == 'final':
@@ -202,7 +243,7 @@ def build(spec, cues, path):
                 parts.append(f'<div class="statv" id="s{i}v{k}" style="top:{top}px">0</div>'
                              f'<div class="statl" id="s{i}l{k}" style="top:{top + 170}px">{_esc(it.get("label", ""))}</div>')
             scenes_js[-1]['items'] = parsed
-            m = ''.join(parts)
+            m = ''.join(parts) + f'<div class="ghostline"></div><div class="ghost" style="font-size:120px">{_esc(spec.title.upper())}</div>'
         elif sc.kind == 'cards':
             items = sc.data.get('items', [])[:3]
             parsed = [{'title': it.get('title', ''), 'text': it.get('text', '')} for it in items]
@@ -221,8 +262,11 @@ def build(spec, cues, path):
         markup.append(f'<div class="scene {sc.kind}" id="sc{i}" data-kind="{sc.kind}">{m}</div>')
 
     seg_html = ''.join('<div class="seg"><div class="segfill"></div></div>' for _ in spec.scenes)
+    pal = PALETTES.get(getattr(spec, 'palette', 'teal'), PALETTES['teal'])
+    root_css = (f":root{{--bg:{pal['bg']};--bg2:{pal['bg2']};--a1:{pal['a1']};"
+                f"--a2:{pal['a2']};--a3:{pal['a3']}}}")
     board_css = board_mod.BOARD_CSS.replace('__FONT__', board_mod.assets()['font'])
-    html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{CSS.replace('__W__', str(W)).replace('__H__', str(H))}{board_css}</style></head>
+    html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{root_css}{CSS.replace('__W__', str(W)).replace('__H__', str(H))}{board_css}</style></head>
 <body><div id="stage">
 <div class="glow" id="g1"></div><div class="glow" id="g2"></div><div class="glow" id="g3"></div>
 <div id="prog">{seg_html}</div>

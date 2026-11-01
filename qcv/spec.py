@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'verdict', 'final'}
+SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'verdict', 'final'}
 # Короткое имя слоя — anim. board и wb оставлены для совместимости.
 ALIASES = {'anim': 'board', 'wb': 'board'}
 
@@ -26,6 +26,7 @@ class Spec:
     speaker: str = 'eugene'
     rate: float = 0.94
     accent: str = 'teal'
+    palette: str = 'teal'
     out_name: str = ''
 
     @property
@@ -61,6 +62,7 @@ def load(path: str) -> Spec:
         speaker=raw.get('voice', {}).get('speaker', 'eugene'),
         rate=float(raw.get('voice', {}).get('rate', 0.94)),
         accent=raw.get('accent', 'teal'),
+        palette=raw.get('palette', 'teal'),
         out_name=raw.get('out', ''),
         scenes=scenes,
     )

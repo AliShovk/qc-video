@@ -1,0 +1,47 @@
+{
+  "slug": "groq-guide",
+  "title": "GROQ API",
+  "kicker": "гайд",
+  "palette": "violet",
+  "voice": {"speaker": "eugene", "rate": 0.94},
+  "out": "groq-guide.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "14",
+      "unit": "моделей в каталоге Groq",
+      "tag": "и от 5 центов за миллион",
+      "say": "Четырнадцать моделей и от пяти центов за миллион токенов. Разбираем, как подключить Groq за пять минут.",
+      "cap": "14 моделей · от $0,05 за 1M"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {"title": "ключ в консоли", "text": "console.groq.com, раздел API Keys"},
+        {"title": "base_url в SDK", "text": "тот же openai, другой адрес"},
+        {"title": "первый запрос", "text": "модель llama-3.1-8b-instant"}
+      ],
+      "say": "Сначала ключ в консоли GroqCloud. Потом подставляем base_url в тот же SDK openai. И делаем первый запрос.",
+      "cap": "ключ → base_url → запрос"
+    },
+    {
+      "type": "stats",
+      "items": [
+        {"value": "0.05", "label": "доллара за 1M входных токенов"},
+        {"value": "0.8", "label": "у qwen3.8-27b"},
+        {"value": "131072", "label": "токенов контекста"}
+      ],
+      "say": "Самая дешёвая модель — пять сотых доллара за миллион входных токенов. Контекст — сто тридцать одна тысяча.",
+      "cap": "$0,05 за 1M · контекст 131 072"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "Groq API: ключ, модели, цены и лимиты",
+      "address": "qantcore.space",
+      "note": "гайды и обзоры по AI-агентам",
+      "say": "Пошаговый гайд со скриншотами — на qantcore.space!",
+      "cap": "qantcore.space"
+    }
+  ]
+}
