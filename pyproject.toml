@@ -1,0 +1,9 @@
+[project]
+name = "qc-video"
+version = "0.1.0"
+description = "Оркестратор вертикальных видео: JSON-сценарий, Silero-озвучка, неоновая анимация, MP4"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[project.scripts]
+qc-video = "qcv.cli:main"
