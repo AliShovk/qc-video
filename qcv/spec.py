@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'verdict', 'final'}
+# Короткие псевдонимы: в спецификациях пишем wb вместо board.
+ALIASES = {'wb': 'board'}
 
 
 @dataclass
@@ -35,7 +37,7 @@ def load(path: str) -> Spec:
     raw = json.load(open(path, encoding='utf-8'))
     scenes = []
     for item in raw.get('scenes', []):
-        kind = item.get('type')
+        kind = ALIASES.get(item.get('type'), item.get('type'))
         if kind not in SCENE_TYPES:
             raise ValueError(f'неизвестный тип сцены: {kind}')
         say = (item.get('say') or '').strip()

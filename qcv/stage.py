@@ -26,8 +26,8 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:#040A0F;
 .hnum{position:absolute;left:0;right:0;top:560px;text-align:center;font-size:290px;
   font-weight:800;line-height:1;color:#FFB020;text-shadow:0 0 110px rgba(255,176,32,.5)}
 .hunit{position:absolute;left:0;right:0;top:910px;text-align:center;font-size:48px;color:#E8FBFF}
-.htag{position:absolute;left:50%;margin-left:-270px;top:1030px;width:540px;text-align:center;
-  padding:20px 0;border:3px solid #FF4B5C;border-radius:16px;color:#FF4B5C;font-size:36px;font-weight:700}
+.htag{position:absolute;left:50%;margin-left:-300px;top:1035px;width:600px;text-align:center;
+  padding:18px 0;border:3px solid #FF4B5C;border-radius:16px;color:#FF4B5C;font-size:31px;font-weight:700;white-space:nowrap}
 .statv{position:absolute;left:80px;font-weight:800;font-size:150px;line-height:1;color:#E8FBFF}
 .statl{position:absolute;left:84px;font-size:32px;color:#7FB3C4}
 .card{position:absolute;left:70px;width:940px;padding:34px 34px;border-radius:22px;
@@ -45,7 +45,7 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:#040A0F;
   color:#8FD9E8;line-height:1.35}
 .faddr{position:absolute;left:0;right:0;top:960px;text-align:center;font-size:116px;font-weight:800;
   color:#FFFFFF;letter-spacing:-.02em;text-shadow:0 0 70px rgba(0,224,184,.75),0 0 160px rgba(43,108,255,.4)}
-.ghost{position:absolute;left:0;right:0;top:1290px;text-align:center;font-size:210px;font-weight:800;letter-spacing:.02em;color:rgba(0,224,184,.10)}
+.ghost{position:absolute;left:0;right:0;top:1300px;text-align:center;font-size:170px;font-weight:800;letter-spacing:.02em;white-space:nowrap;color:rgba(0,224,184,.10)}
 .ghostline{position:absolute;left:340px;right:340px;top:1260px;height:2px;background:rgba(0,224,184,.18)}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
 """
@@ -166,7 +166,9 @@ def build(spec, cues, path):
                                       unit=_esc(sc.data.get('unit', '')),
                                       tag=_esc(sc.data.get('tag', '')))
             m = m.replace('<div class="hnum"', f'<div class="brand">{_esc(spec.title.upper())}</div><div class="hnum"', 1)
-            m += f'<div class="ghostline"></div><div class="ghost">{_esc(spec.title.upper())}</div>'
+            gsz = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 10 else 112)
+            m += (f'<div class="ghostline"></div>'
+                  f'<div class="ghost" style="font-size:{gsz}px">{_esc(spec.title.upper())}</div>')
         elif sc.kind == 'verdict':
             raw_score = str(sc.data.get('score', '0')).replace(',', '.')
             try:
