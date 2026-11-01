@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-SCENE_TYPES = {'hook', 'stats', 'cards', 'verdict', 'final'}
+SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'verdict', 'final'}
 
 
 @dataclass

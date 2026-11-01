@@ -1,6 +1,8 @@
 """HTML-сцена: тёмный неон, сцены по таймингам, прогресс-бар, луп."""
 import json
 
+from . import board as board_mod
+
 W, H = 1080, 1920
 
 CSS = r"""
@@ -115,6 +117,8 @@ window.setTime=function(t){
       el.textContent=(s.score*p).toFixed(1).replace('.',',');
       el.style.opacity=p;
       document.getElementById('s'+i+'u').style.opacity=ease((lt-0.35)/0.45);
+    } else if(s.kind==='board'){
+      boardFrame(i, lt, s.end-s.start);
     } else if(s.kind==='final'){
       document.querySelectorAll('#sc'+i+' .fhead').forEach(e=>e.style.opacity=ease((lt-0.02)/0.4));
       document.querySelectorAll('#sc'+i+' .fsub').forEach(e=>e.style.opacity=ease((lt-0.2)/0.4));
@@ -125,7 +129,14 @@ window.setTime=function(t){
     }
   });
   const act=CAPS.find(k=>t>=k[0]&&t<=k[1]);
-  if(act&&!looping){cap.textContent=act[2];cap.style.opacity=clamp((t-act[0])/0.2).toFixed(2);}
+  if(act&&!looping){
+    cap.textContent=act[2];
+    cap.style.opacity=clamp((t-act[0])/0.2).toFixed(2);
+    const cur=SCENES.find(s=>t>=s.start&&t<s.end);
+    const onBoard=!!(cur&&cur.kind==='board');
+    cap.style.color=onBoard?'#1D1D1D':'#E8FBFF';
+    cap.style.textShadow=onBoard?'none':'0 3px 20px rgba(0,0,0,.9)';
+  }
   else cap.style.opacity='0';
 };
 setTime(0);
@@ -167,6 +178,8 @@ def build(spec, cues, path):
                                          note=_esc(sc.data.get('note', '')))
             m = m.replace('<div class="vscore"', f'<div class="brand sm">{_esc(spec.title.upper())}</div><div class="vscore"', 1)
             m += f'<div class="ghost">{_esc(spec.title.upper())}</div>'
+        elif sc.kind == 'board':
+            m = board_mod.markup(i, sc)
         elif sc.kind == 'final':
             m = MARKUP['final'].format(head=_esc(sc.data.get('headline', '')),
                                        sub=_esc(sc.data.get('sub', '')),
@@ -203,17 +216,18 @@ def build(spec, cues, path):
         else:
             m = ''
 
-        markup.append(f'<div class="scene" id="sc{i}" data-kind="{sc.kind}">{m}</div>')
+        markup.append(f'<div class="scene {sc.kind}" id="sc{i}" data-kind="{sc.kind}">{m}</div>')
 
     seg_html = ''.join('<div class="seg"><div class="segfill"></div></div>' for _ in spec.scenes)
-    html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{CSS.replace('__W__', str(W)).replace('__H__', str(H))}</style></head>
+    board_css = board_mod.BOARD_CSS.replace('__FONT__', board_mod.assets()['font'])
+    html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{CSS.replace('__W__', str(W)).replace('__H__', str(H))}{board_css}</style></head>
 <body><div id="stage">
 <div class="glow" id="g1"></div><div class="glow" id="g2"></div><div class="glow" id="g3"></div>
 <div id="prog">{seg_html}</div>
 {''.join(markup)}
 <div id="cap"></div>
 </div>
-<script>{JS.replace('__SCENES__', json.dumps(scenes_js)).replace('__CAPS__', json.dumps(caps, ensure_ascii=False)).replace('__TOTAL__', f'{total:.3f}').replace('__DUR__', f'{total:.3f}')}</script>
+<script>{board_mod.assets()['rough']}\n{board_mod.BOARD_JS}\n{JS.replace('__SCENES__', json.dumps(scenes_js)).replace('__CAPS__', json.dumps(caps, ensure_ascii=False)).replace('__TOTAL__', f'{total:.3f}').replace('__DUR__', f'{total:.3f}')}</script>
 </body></html>'''
 
     open(path, 'w', encoding='utf-8').write(html)
