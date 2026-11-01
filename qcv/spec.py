@@ -4,8 +4,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'verdict', 'final'}
-# Короткие псевдонимы: в спецификациях пишем wb вместо board.
-ALIASES = {'wb': 'board'}
+# Короткое имя слоя — anim. board и wb оставлены для совместимости.
+ALIASES = {'anim': 'board', 'wb': 'board'}
 
 
 @dataclass
