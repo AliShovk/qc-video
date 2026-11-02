@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'verdict', 'final'}
+SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'type', 'split', 'film', 'verdict', 'final'}
 # Короткое имя слоя — anim. board и wb оставлены для совместимости.
 ALIASES = {'anim': 'board', 'wb': 'board'}
 
@@ -27,6 +27,7 @@ class Spec:
     rate: float = 0.94
     accent: str = 'teal'
     palette: str = 'teal'
+    bgstyle: str = 'mesh'
     out_name: str = ''
 
     @property
@@ -51,8 +52,8 @@ def load(path: str) -> Spec:
         raise ValueError('в спецификации нет сцен')
     if scenes[-1].kind != 'final':
         raise ValueError('последняя сцена должна быть final')
-    if scenes[0].kind != 'hook':
-        raise ValueError('первая сцена должна быть hook')
+    if scenes[0].kind not in {'hook', 'type'}:
+        raise ValueError('первая сцена должна быть hook или type')
 
     return Spec(
         slug=raw['slug'],
@@ -63,6 +64,7 @@ def load(path: str) -> Spec:
         rate=float(raw.get('voice', {}).get('rate', 0.94)),
         accent=raw.get('accent', 'teal'),
         palette=raw.get('palette', 'teal'),
+        bgstyle=raw.get('bg', 'mesh'),
         out_name=raw.get('out', ''),
         scenes=scenes,
     )

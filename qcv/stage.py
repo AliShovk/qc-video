@@ -9,6 +9,7 @@ PALETTES = {
     'teal': {'bg': 'var(--bg)', 'bg2': 'var(--bg2)', 'a1': 'var(--a1)', 'a2': 'var(--a2)', 'a3': 'var(--a3)'},
     'violet': {'bg': '#0A0614', 'bg2': '#1B0B33', 'a1': '#C6F432', 'a2': '#8B5CF6', 'a3': '#FF5DB1'},
     'amber': {'bg': '#0C0703', 'bg2': '#2A1405', 'a1': '#FFC24B', 'a2': '#FF6B3D', 'a3': '#7CE0C3'},
+    'lime': {'bg': '#060A05', 'bg2': '#12240D', 'a1': '#B6FF3D', 'a2': '#00E0A8', 'a3': '#FF7A45'},
 }
 
 CSS = r"""
@@ -18,6 +19,9 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
 #stage{position:relative;width:__W__px;height:__H__px;overflow:hidden;
   background:radial-gradient(80% 55% at 50% 20%,var(--bg2) 0%,#061018 55%,#03070B 100%)}
 .scene{position:absolute;inset:0;opacity:0}
+#bggrid,#bgdots{position:absolute;inset:0;pointer-events:none}
+#bggrid{background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:90px 90px;opacity:0}
+#bgdots{background-image:radial-gradient(rgba(255,255,255,.14) 1.6px,transparent 1.6px);background-size:44px 44px;opacity:0}
 .glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45}
 #g1{width:620px;height:620px;left:-170px;top:170px;background:var(--a1)}
 #g2{width:540px;height:540px;right:-170px;top:760px;background:var(--a2)}
@@ -51,7 +55,7 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
   color:#8FD9E8;line-height:1.35}
 .faddr{position:absolute;left:0;right:0;top:960px;text-align:center;font-size:116px;font-weight:800;
   color:#FFFFFF;letter-spacing:-.02em;text-shadow:0 0 70px rgba(0,224,184,.75),0 0 160px rgba(43,108,255,.4)}
-.ghost{position:absolute;left:0;right:0;top:1300px;text-align:center;font-size:170px;font-weight:800;letter-spacing:.02em;white-space:nowrap;color:rgba(0,224,184,.10)}
+.ghost{position:absolute;left:0;right:0;top:1300px;text-align:center;font-size:120px;font-weight:800;letter-spacing:.02em;white-space:nowrap;color:rgba(0,224,184,.10)}
 .ghostline{position:absolute;left:340px;right:340px;top:1260px;height:2px;background:rgba(0,224,184,.18)}
 .rail{position:absolute;left:206px;top:560px;width:4px;height:0;background:var(--a1);opacity:.35}
 .stepc{position:absolute;left:148px;width:120px;height:120px;border-radius:50%;border:4px solid var(--a1);
@@ -59,6 +63,22 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
   background:rgba(4,10,15,.65)}
 .stept{position:absolute;left:312px;right:70px;font-size:46px;font-weight:700;line-height:1.15}
 .stepd{position:absolute;left:314px;right:70px;font-size:30px;color:#8FD9E8;line-height:1.25}
+.typo{position:absolute;left:64px;right:64px;top:520px;text-align:left}
+.typo .ln{display:block;font-weight:800;line-height:.98;letter-spacing:-.02em;font-size:150px;color:#E8FBFF;margin-bottom:6px}
+.typo .ln.acc{color:var(--a2)}
+.typo .sub{font-size:34px;color:#8FD9E8;margin-top:34px;line-height:1.35}
+.splitL{position:absolute;left:64px;top:560px;width:452px}
+.splitL .k{font-size:22px;letter-spacing:.22em;color:var(--a1);text-transform:uppercase}
+.splitL .v{font-size:118px;font-weight:800;line-height:1;margin-top:16px;color:#E8FBFF}
+.splitL .t{font-size:34px;font-weight:700;margin-top:18px;color:#E8FBFF;line-height:1.2}
+.splitR{position:absolute;right:48px;top:596px;width:452px}
+.splitR .it{font-size:27px;line-height:1.35;color:#BFE6EF;padding:14px 0 14px 26px;border-left:3px solid var(--a1);margin-bottom:14px}
+.filmstrip{position:absolute;left:40px;right:40px;top:430px}
+.filmstrip .fr{position:relative;height:360px;border-radius:16px;border:2px solid rgba(255,255,255,.15);
+  margin-bottom:26px;padding:26px 30px;background:rgba(255,255,255,.04);display:flex;flex-direction:column;justify-content:flex-end}
+.filmstrip .fr .n{position:absolute;top:18px;left:26px;font-size:20px;letter-spacing:.2em;color:var(--a1)}
+.filmstrip .fr .h{font-size:54px;font-weight:800;line-height:1.05}
+.filmstrip .fr .d{font-size:28px;color:#8FD9E8;margin-top:10px}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
 """
 
@@ -133,6 +153,34 @@ window.setTime=function(t){
       el.textContent=(s.score*p).toFixed(1).replace('.',',');
       el.style.opacity=p;
       document.getElementById('s'+i+'u').style.opacity=ease((lt-0.35)/0.45);
+    } else if(s.kind==='type'){
+      for(let k=0;k<(s.lines||0);k++){
+        const p=ease((lt-0.05-k*0.22)/0.4);
+        const el=document.getElementById('s'+i+'l'+k);
+        el.style.opacity=p;
+        el.style.transform='translateX('+((1-p)*-40).toFixed(1)+'px)';
+        el.style.clipPath='inset(0 '+(100-p*100).toFixed(1)+'% 0 0)';
+      }
+      const sb=document.getElementById('s'+i+'sub');
+      if(sb){ sb.style.opacity=ease((lt-0.7)/0.5); sb.style.transform='translateY('+((1-ease((lt-0.7)/0.5))*18).toFixed(1)+'px)'; }
+    } else if(s.kind==='split'){
+      const pv=ease(lt/0.5);
+      const v=document.getElementById('s'+i+'v');
+      v.style.opacity=pv; v.style.transform='translateY('+((1-pv)*26).toFixed(1)+'px)';
+      document.getElementById('s'+i+'t').style.opacity=ease((lt-0.2)/0.45);
+      (s.items||[]).forEach(function(it,k){
+        const p=ease((lt-0.25-k*0.3)/0.45);
+        const el=document.getElementById('s'+i+'i'+k);
+        el.style.opacity=p; el.style.transform='translateX('+((1-p)*26).toFixed(1)+'px)';
+      });
+    } else if(s.kind==='film'){
+      for(let k=0;k<(s.frames||0);k++){
+        const p=ease((lt-0.1-k*0.32)/0.45);
+        const el=document.getElementById('s'+i+'f'+k);
+        el.style.opacity=p;
+        const dir=(k%2===0)?-1:1;
+        el.style.transform='translateX('+((1-p)*60*dir).toFixed(1)+'px) scale('+(0.96+0.04*p).toFixed(3)+')';
+      }
     } else if(s.kind==='steps'){
       const rail=document.getElementById('s'+i+'rail');
       if(rail) rail.style.height=(Math.min(1, lt/1.2)*((s.items.length-1)*330+60)).toFixed(0)+'px';
@@ -194,6 +242,7 @@ def build(spec, cues, path):
                                       tag=_esc(sc.data.get('tag', '')))
             m = m.replace('<div class="hnum"', f'<div class="brand">{_esc(spec.title.upper())}</div><div class="hnum"', 1)
             gsz = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 10 else 112)
+            gsz = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 9 else 104)
             m += (f'<div class="ghostline"></div>'
                   f'<div class="ghost" style="font-size:{gsz}px">{_esc(spec.title.upper())}</div>')
         elif sc.kind == 'verdict':
@@ -206,7 +255,8 @@ def build(spec, cues, path):
                                          score=_esc(sc.data.get('score', '')),
                                          note=_esc(sc.data.get('note', '')))
             m = m.replace('<div class="vscore"', f'<div class="brand sm">{_esc(spec.title.upper())}</div><div class="vscore"', 1)
-            m += f'<div class="ghost">{_esc(spec.title.upper())}</div>'
+            gsz2 = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 9 else 104)
+            m += f'<div class="ghost" style="font-size:{gsz2}px">{_esc(spec.title.upper())}</div>'
         elif sc.kind == 'steps':
             items = sc.data.get('items', [])[:4]
             parsed = [{'title': it.get('title', ''), 'text': it.get('text', '')} for it in items]
@@ -220,6 +270,42 @@ def build(spec, cues, path):
                 parts.append(f'<div class="stepc" id="s{i}c{k}" style="top:{y}px;left:148px">{k + 1}</div>'
                              f'<div class="stept" id="s{i}t{k}" style="top:{y + 8}px">{_esc(it.get("title", ""))}</div>'
                              f'<div class="stepd" id="s{i}d{k}" style="top:{y + 66}px">{_esc(it.get("text", ""))}</div>')
+            m = ''.join(parts)
+        elif sc.kind == 'type':
+            lines = sc.data.get('lines', [])
+            acc = int(sc.data.get('accent', -1))
+            parts = [f'<div class="kicker">{_esc(spec.kicker)}</div>', '<div class="typo">']
+            for k, ln in enumerate(lines[:3]):
+                cls = 'ln acc' if k == acc else 'ln'
+                L = len(ln)
+                fs = 150 if L <= 8 else (128 if L <= 10 else (108 if L <= 12 else 92))
+                parts.append(f'<span class="{cls}" id="s{i}l{k}" style="font-size:{fs}px">{_esc(ln)}</span>')
+            if sc.data.get('sub'):
+                parts.append(f'<div class="sub" id="s{i}sub">{_esc(sc.data["sub"])}</div>')
+            parts.append('</div>')
+            scenes_js[-1]['lines'] = len(lines[:3])
+            m = ''.join(parts)
+        elif sc.kind == 'split':
+            items = sc.data.get('items', [])[:4]
+            scenes_js[-1]['items'] = [{'text': x} for x in items]
+            parts = ['<div class="kicker">%s</div>' % _esc(spec.kicker),
+                     f'<div class="splitL"><div class="k">{_esc(sc.data.get("label",""))}</div>'
+                     f'<div class="v" id="s{i}v">{_esc(sc.data.get("value",""))}</div>'
+                     f'<div class="t" id="s{i}t">{_esc(sc.data.get("title",""))}</div></div>',
+                     f'<div class="splitR" id="s{i}r">']
+            for k, it in enumerate(items):
+                parts.append(f'<div class="it" id="s{i}i{k}">{_esc(it)}</div>')
+            parts.append('</div>')
+            m = ''.join(parts)
+        elif sc.kind == 'film':
+            frames = sc.data.get('frames', [])[:3]
+            scenes_js[-1]['frames'] = len(frames)
+            parts = ['<div class="kicker">%s</div>' % _esc(spec.kicker), '<div class="filmstrip">']
+            for k, fr in enumerate(frames):
+                parts.append(f'<div class="fr" id="s{i}f{k}"><div class="n">{k+1:02d}</div>'
+                             f'<div class="h">{_esc(fr.get("h",""))}</div>'
+                             f'<div class="d">{_esc(fr.get("d",""))}</div></div>')
+            parts.append('</div>')
             m = ''.join(parts)
         elif sc.kind == 'board':
             m = board_mod.markup(i, sc)
@@ -243,7 +329,7 @@ def build(spec, cues, path):
                 parts.append(f'<div class="statv" id="s{i}v{k}" style="top:{top}px">0</div>'
                              f'<div class="statl" id="s{i}l{k}" style="top:{top + 170}px">{_esc(it.get("label", ""))}</div>')
             scenes_js[-1]['items'] = parsed
-            m = ''.join(parts) + f'<div class="ghostline"></div><div class="ghost" style="font-size:120px">{_esc(spec.title.upper())}</div>'
+            m = ''.join(parts) + f'<div class="ghostline"></div><div class="ghost" style="font-size:{104 if len(spec.title) > 9 else 130}px">{_esc(spec.title.upper())}</div>'
         elif sc.kind == 'cards':
             items = sc.data.get('items', [])[:3]
             parsed = [{'title': it.get('title', ''), 'text': it.get('text', '')} for it in items]
@@ -263,11 +349,13 @@ def build(spec, cues, path):
 
     seg_html = ''.join('<div class="seg"><div class="segfill"></div></div>' for _ in spec.scenes)
     pal = PALETTES.get(getattr(spec, 'palette', 'teal'), PALETTES['teal'])
+    bgstyle = getattr(spec, 'bgstyle', 'mesh')
     root_css = (f":root{{--bg:{pal['bg']};--bg2:{pal['bg2']};--a1:{pal['a1']};"
                 f"--a2:{pal['a2']};--a3:{pal['a3']}}}")
     board_css = board_mod.BOARD_CSS.replace('__FONT__', board_mod.assets()['font'])
     html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{root_css}{CSS.replace('__W__', str(W)).replace('__H__', str(H))}{board_css}</style></head>
 <body><div id="stage">
+<div id="bggrid" style="opacity:{1 if bgstyle == 'grid' else 0}"></div><div id="bgdots" style="opacity:{1 if bgstyle == 'dots' else 0}"></div>
 <div class="glow" id="g1"></div><div class="glow" id="g2"></div><div class="glow" id="g3"></div>
 <div id="prog">{seg_html}</div>
 {''.join(markup)}
