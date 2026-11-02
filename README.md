@@ -9,6 +9,11 @@ qc-video make specs/manus-hook.json
 
 За 5–6 минут на 4 vCPU получается ролик 1080×1920 с хуком, цифрами, карточками и финальным адресом.
 
+## Формат «бумага»
+
+Рукописный стиль для обзоров: кремовая бумага, rough.js, скетч-робот с позами.
+Описание и пример — [docs/FORMAT-paper.md](docs/FORMAT-paper.md), спеки `specs/cherry-paper.json` и `specs/ruflo-paper.json`.
+
 ## Что внутри
 
 | Шаг | Модуль | Что делает |

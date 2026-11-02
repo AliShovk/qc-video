@@ -1,0 +1,80 @@
+{
+  "slug": "ruflo-paper",
+  "title": "RUFLO",
+  "kicker": "обзор",
+  "palette": "paper",
+  "bg": "grid",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "ruflo-paper.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "8,2",
+      "unit": "из 10 — Ruflo",
+      "tag": "100+ агентов за $0 лицензии",
+      "pose": "point",
+      "say": "Восемь и два из десяти. Сто с лишним агентов и ноль рублей за лицензию — разбираем Ruflo.",
+      "cap": "8,2 из 10 — и 100+ агентов"
+    },
+    {
+      "type": "split",
+      "label": "что внутри",
+      "value": "100+",
+      "title": "агентов в одном swarm",
+      "items": [
+        "код и рефакторинг",
+        "тесты",
+        "безопасность",
+        "документация",
+        "архитектура"
+      ],
+      "pose": "think",
+      "say": "Внутри больше сотни специализированных ролей: код, тесты, безопасность, документация и архитектура.",
+      "cap": "100+ ролей в одном swarm"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "lines": [
+        "npx ruflo@latest init wizard"
+      ],
+      "pose": "point",
+      "say": "Установка — одна команда в терминале, она на экране.",
+      "cap": "npx ruflo@latest init wizard"
+    },
+    {
+      "type": "diagram",
+      "nodes": [
+        {
+          "t": "Claude Code / Codex",
+          "s": "ваш рабочий агент"
+        },
+        {
+          "t": "Ruflo",
+          "s": "meta-harness: память, маршрутизация"
+        },
+        {
+          "t": "swarm агентов",
+          "s": "роли, воркеры, координация"
+        }
+      ],
+      "pose": "idle",
+      "say": "Схема такая: ваш агент сверху, Ruflo посередине, а под ним — управляемый swarm.",
+      "cap": "агент → harness → swarm"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ РАЗБОР",
+      "sub": "Ruflo: meta-harness для Claude Code и Codex",
+      "address": "qantcore.space",
+      "note": "обзоры и гайды по AI-агентам",
+      "pose": "cheer",
+      "say": "Полный разбор — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}
