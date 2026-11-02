@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'type', 'split', 'film', 'verdict', 'final'}
+SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'type', 'split', 'film', 'code', 'diagram', 'verdict', 'final'}
 # Короткое имя слоя — anim. board и wb оставлены для совместимости.
 ALIASES = {'anim': 'board', 'wb': 'board'}
 

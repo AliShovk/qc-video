@@ -6,7 +6,7 @@ from . import board as board_mod
 W, H = 1080, 1920
 
 PALETTES = {
-    'teal': {'bg': 'var(--bg)', 'bg2': 'var(--bg2)', 'a1': 'var(--a1)', 'a2': 'var(--a2)', 'a3': 'var(--a3)'},
+    'teal': {'bg': '#040A0F', 'bg2': '#0A2230', 'a1': '#00E0B8', 'a2': '#FFB020', 'a3': '#2B6CFF'},
     'violet': {'bg': '#0A0614', 'bg2': '#1B0B33', 'a1': '#C6F432', 'a2': '#8B5CF6', 'a3': '#FF5DB1'},
     'amber': {'bg': '#0C0703', 'bg2': '#2A1405', 'a1': '#FFC24B', 'a2': '#FF6B3D', 'a3': '#7CE0C3'},
     'lime': {'bg': '#060A05', 'bg2': '#12240D', 'a1': '#B6FF3D', 'a2': '#00E0A8', 'a3': '#FF7A45'},
@@ -79,6 +79,22 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
 .filmstrip .fr .n{position:absolute;top:18px;left:26px;font-size:20px;letter-spacing:.2em;color:var(--a1)}
 .filmstrip .fr .h{font-size:54px;font-weight:800;line-height:1.05}
 .filmstrip .fr .d{font-size:28px;color:#8FD9E8;margin-top:10px}
+.codebox{position:absolute;left:56px;right:56px;top:700px;border-radius:18px;background:#0B1017;
+  border:1px solid rgba(148,163,184,.22);box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden}
+.codebar{height:56px;display:flex;align-items:center;gap:10px;padding:0 20px;background:rgba(255,255,255,.03);
+  border-bottom:1px solid rgba(148,163,184,.14)}
+.codebar .d{width:12px;height:12px;border-radius:50%}
+.codebar .lbl{margin-left:10px;font-size:22px;color:#7C8AA0;letter-spacing:.08em}
+.codebody{padding:28px 30px 34px;font-family:'DejaVu Sans Mono',monospace;font-size:36px;line-height:1.6;color:#D7E3F4}
+.codebody .pr{color:#6EE7B7}
+.codebody .cm{color:#6B7A90}
+#s0cursor,.cursor{display:inline-block;width:16px;height:38px;background:#B6FF3D;vertical-align:-6px;margin-left:4px}
+.dgnode{position:absolute;left:50%;width:760px;margin-left:-380px;padding:26px 30px;border-radius:18px;
+  border:2px solid rgba(255,255,255,.18);background:rgba(10,16,26,.85)}
+.dgnode .t{font-size:44px;font-weight:800}
+.dgnode .s{font-size:26px;color:#8FD9E8;margin-top:10px}
+.dgarr{position:absolute;left:50%;width:4px;background:var(--a1);margin-left:-2px}
+.dgarr::after{content:'';position:absolute;bottom:-11px;left:-6px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:11px solid var(--a1)}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
 """
 
@@ -153,6 +169,34 @@ window.setTime=function(t){
       el.textContent=(s.score*p).toFixed(1).replace('.',',');
       el.style.opacity=p;
       document.getElementById('s'+i+'u').style.opacity=ease((lt-0.35)/0.45);
+    } else if(s.kind==='code'){
+      const code=s.code||[];
+      const total=code.join('').length||1;
+      const shown=Math.floor(total*clamp((lt-0.15)/Math.max(0.8,(s.end-s.start-0.9))));
+      let left=shown;
+      for(let k=0;k<code.length;k++){
+        const line=code[k];
+        const n=Math.max(0,Math.min(line.length,left));
+        left-=line.length;
+        const el=document.getElementById('s'+i+'cl'+k);
+        const txt=line.slice(0,n);
+        el.innerHTML=(k===0?'<span class="pr">$ </span>':'')+
+          (txt.startsWith('#')?'<span class="cm">'+txt+'</span>':txt)+
+          (left<=0 && n===line.length && k===code.length-1?'<span class="cursor"></span>':'');
+        el.style.opacity=n>0?1:0.25;
+      }
+    } else if(s.kind==='diagram'){
+      (function(){
+        const n=s.nodes||0;
+        for(let k=0;k<n;k++){
+          const p=ease((lt-0.1-k*0.42)/0.4);
+          const el=document.getElementById('s'+i+'n'+k);
+          el.style.opacity=p;
+          el.style.transform='translateY('+((1-p)*24).toFixed(1)+'px) scale('+(0.96+0.04*p).toFixed(3)+')';
+          const ar=document.getElementById('s'+i+'a'+k);
+          if(ar){ ar.style.height=(Math.max(0,Math.min(1,(lt-0.35-k*0.42)/0.3))*150).toFixed(0)+'px'; }
+        }
+      })();
     } else if(s.kind==='type'){
       for(let k=0;k<(s.lines||0);k++){
         const p=ease((lt-0.05-k*0.22)/0.4);
@@ -306,6 +350,30 @@ def build(spec, cues, path):
                              f'<div class="h">{_esc(fr.get("h",""))}</div>'
                              f'<div class="d">{_esc(fr.get("d",""))}</div></div>')
             parts.append('</div>')
+            m = ''.join(parts)
+        elif sc.kind == 'code':
+            lines = sc.data.get('lines', [])[:6]
+            scenes_js[-1]['code'] = lines
+            body = ''.join(f'<div class="ln" id="s{i}cl{k}"></div>' for k, _ in enumerate(lines))
+            m = (f'<div class="kicker">{_esc(spec.kicker)}</div>'
+                 f'<div class="codebox"><div class="codebar">'
+                 f'<span class="d" style="background:#FF5F57"></span><span class="d" style="background:#FEBC2E"></span>'
+                 f'<span class="d" style="background:#28C840"></span>'
+                 f'<span class="lbl">{_esc(sc.data.get("label", "terminal"))}</span></div>'
+                 f'<div class="codebody" id="s{i}cb">{body}</div></div>')
+        elif sc.kind == 'diagram':
+            nodes = sc.data.get('nodes', [])[:4]
+            scenes_js[-1]['nodes'] = len(nodes)
+            parts = ['<div class="kicker">%s</div>' % _esc(spec.kicker)]
+            top = sc.data.get('top', 470)
+            step = sc.data.get('gap', 330)
+            for k, nd in enumerate(nodes):
+                y = top + k * step
+                parts.append(f'<div class="dgnode" id="s{i}n{k}" style="top:{y}px">'
+                             f'<div class="t">{_esc(nd.get("t",""))}</div>'
+                             f'<div class="s">{_esc(nd.get("s",""))}</div></div>')
+                if k < len(nodes) - 1:
+                    parts.append(f'<div class="dgarr" id="s{i}a{k}" style="top:{y+150}px;height:0"></div>')
             m = ''.join(parts)
         elif sc.kind == 'board':
             m = board_mod.markup(i, sc)
