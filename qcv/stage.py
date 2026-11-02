@@ -10,12 +10,13 @@ PALETTES = {
     'violet': {'bg': '#0A0614', 'bg2': '#1B0B33', 'a1': '#C6F432', 'a2': '#8B5CF6', 'a3': '#FF5DB1'},
     'amber': {'bg': '#0C0703', 'bg2': '#2A1405', 'a1': '#FFC24B', 'a2': '#FF6B3D', 'a3': '#7CE0C3'},
     'lime': {'bg': '#060A05', 'bg2': '#12240D', 'a1': '#B6FF3D', 'a2': '#00E0A8', 'a3': '#FF7A45'},
+    'paper': {'bg': '#F7F4EA', 'bg2': '#EFE7D6', 'a1': '#2F6BFF', 'a2': '#FF7A3D', 'a3': '#1D1D1D'},
 }
 
 CSS = r"""
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
-  font-family:'DejaVu Sans',sans-serif;color:#E8FBFF}
+  font-family:'DejaVu Sans',sans-serif;color:var(--ink)}
 #stage{position:relative;width:__W__px;height:__H__px;overflow:hidden;
   background:radial-gradient(80% 55% at 50% 20%,var(--bg2) 0%,#061018 55%,#03070B 100%)}
 .scene{position:absolute;inset:0;opacity:0}
@@ -95,7 +96,39 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
 .dgnode .s{font-size:26px;color:#8FD9E8;margin-top:10px}
 .dgarr{position:absolute;left:50%;width:4px;background:var(--a1);margin-left:-2px}
 .dgarr::after{content:'';position:absolute;bottom:-11px;left:-6px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:11px solid var(--a1)}
+.mascot{position:absolute;left:36px;bottom:150px;width:210px;opacity:0;z-index:5}
+.mascot svg{width:100%;height:auto;display:block}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
+"""
+
+
+PAPER_CSS = r"""
+body.paper #stage{background:#F7F4EA}
+body.paper .glow{display:none}
+body.paper #bggrid{background-image:linear-gradient(rgba(0,0,0,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.055) 1px,transparent 1px)}
+body.paper #bgdots{background-image:radial-gradient(rgba(0,0,0,.16) 1.7px,transparent 1.7px)}
+body.paper .brand{color:#1D1D1D}
+body.paper .brand.sm{color:#5A6472}
+body.paper .hunit,body.paper .statv,body.paper .card .t,body.paper .typo .ln,
+body.paper .splitL .v,body.paper .splitL .t,body.paper .filmstrip .fr .h,
+body.paper .vnote,body.paper .fsub,body.paper .stept,body.paper .dgnode .t{color:#1D1D1D}
+body.paper .statl,body.paper .card .d,body.paper .stepd,body.paper .splitR .it,
+body.paper .typo .sub,body.paper .filmstrip .fr .d,body.paper .dgnode .s,
+body.paper .fnote{color:#4A5568}
+body.paper .hnum{color:var(--a2);text-shadow:none}
+body.paper .vscore{color:var(--a1);text-shadow:none}
+body.paper .htag{border-color:#D93A3A;color:#D93A3A}
+body.paper .fhead{color:#1D1D1D;text-shadow:none}
+body.paper .faddr{color:var(--a1);text-shadow:none}
+body.paper #cap{color:#2A2F3A;text-shadow:none}
+body.paper .seg{background:rgba(0,0,0,.10)}
+body.paper .ghost{color:rgba(20,20,20,.07)}
+body.paper .ghostline{background:rgba(20,20,20,.12)}
+body.paper .card{background:rgba(255,255,255,.8);border-color:rgba(47,107,255,.35);box-shadow:0 10px 30px rgba(60,50,30,.08)}
+body.paper .filmstrip .fr{background:rgba(255,255,255,.8);border-color:rgba(0,0,0,.16)}
+body.paper .dgnode{background:rgba(255,255,255,.85);border-color:rgba(0,0,0,.18)}
+body.paper .stepc{background:#fff}
+body.paper .typo .ln.acc{color:var(--a1)}
 """
 
 MARKUP = {
@@ -120,7 +153,59 @@ const LOOP=0.5;
 
 function numText(v,isFloat){return isFloat? String(parseFloat(v.toFixed(2))).replace('.',',') : String(Math.round(v));}
 
+function drawMascot(){
+  const svg=document.getElementById('msvg'); if(!svg||typeof rough==='undefined') return;
+  const rc=rough.svg(svg);
+  const B='#2F6BFF', F='rgba(47,107,255,.12)';
+  const o={stroke:B,strokeWidth:3.2,roughness:1.5,bowing:1.1};
+  const head=rc.rectangle(30,36,160,88,{...o,fill:F,fillStyle:'hachure',hachureGap:7,hachureAngle:-41});
+  head.setAttribute('stroke-linejoin','round'); svg.appendChild(head);
+  const scr=rc.rectangle(48,54,124,52,{stroke:'#16233D',strokeWidth:3,roughness:1.2,fill:'#16233D',fillStyle:'solid'});
+  svg.appendChild(scr);
+  const eyes=document.createElementNS('http://www.w3.org/2000/svg','g'); eyes.id='eyes';
+  eyes.appendChild(rc.curve([[66,88],[74,74],[82,88]],{stroke:'#8FD0FF',strokeWidth:5,roughness:1.1}));
+  eyes.appendChild(rc.curve([[106,88],[114,74],[122,88]],{stroke:'#8FD0FF',strokeWidth:5,roughness:1.1}));
+  svg.appendChild(eyes);
+  svg.appendChild(rc.line(110,36,110,14,o));
+  const ball=rc.circle(110,10,14,{stroke:B,strokeWidth:3,fill:B,fillStyle:'solid'}); svg.appendChild(ball);
+  const body=rc.rectangle(58,140,104,66,{...o,fill:F,fillStyle:'hachure',hachureGap:8,hachureAngle:-38});
+  svg.appendChild(body);
+  svg.appendChild(rc.line(82,164,138,164,{stroke:'#FF7A3D',strokeWidth:4,roughness:1.2}));
+  svg.appendChild(rc.line(82,182,120,182,{stroke:'rgba(29,29,29,.35)',strokeWidth:3,roughness:1.2}));
+  const armL=document.createElementNS('http://www.w3.org/2000/svg','g');
+  armL.appendChild(rc.line(56,148,34,196,o)); armL.appendChild(rc.circle(32,200,12,{...o,fill:'#fff',fillStyle:'solid'}));
+  svg.appendChild(armL);
+  const armR=document.createElementNS('http://www.w3.org/2000/svg','g'); armR.id='armR';
+  armR.appendChild(rc.line(164,148,186,196,o)); armR.appendChild(rc.circle(188,200,12,{...o,fill:'#fff',fillStyle:'solid'}));
+  armR.style.transformOrigin='164px 148px'; svg.appendChild(armR);
+  svg.appendChild(rc.line(84,206,80,236,o)); svg.appendChild(rc.line(136,206,140,236,o));
+  svg.appendChild(rc.ellipse(76,242,30,12,{...o,fill:'#fff',fillStyle:'solid'}));
+  svg.appendChild(rc.ellipse(144,242,30,12,{...o,fill:'#fff',fillStyle:'solid'}));
+}
+
+function fitGhosts(){
+  document.querySelectorAll('.ghost').forEach(g=>{
+    const w=g.scrollWidth; if(w>1010){g.style.transformOrigin='center';g.style.transform='scale('+(1010/w).toFixed(3)+')';}
+  });
+}
 window.setTime=function(t){
+  if(!window.__gf){fitGhosts();window.__gf=1;}
+  const m=document.getElementById('mascot');
+  if(m){
+    if(!m.dataset.drawn){drawMascot();m.dataset.drawn='1';}
+    m.style.opacity=1;
+    const bob=Math.sin(t*2.2)*4;
+    m.style.transform='translateY('+bob.toFixed(1)+'px)';
+    const blink=(t%3.4)>3.18?0.12:1;
+    const eyes=document.getElementById('eyes');
+    if(eyes) eyes.style.transform='scaleY('+blink+')';
+    const arm=document.getElementById('armR');
+    if(arm){
+      const w=Math.sin(t*3.1)*14;
+      arm.style.transformOrigin='164px 140px';
+      arm.style.transform='rotate('+w.toFixed(1)+'deg)';
+    }
+  }
   const g1=document.getElementById('g1'), g2=document.getElementById('g2'), g3=document.getElementById('g3');
   if(g1){ g1.style.transform='translate('+(40*Math.sin(t*0.45)).toFixed(1)+'px,'+(60*Math.cos(t*0.37)).toFixed(1)+'px)'; }
   if(g2){ g2.style.transform='translate('+(-50*Math.sin(t*0.32+1)).toFixed(1)+'px,'+(40*Math.sin(t*0.5)).toFixed(1)+'px)'; }
@@ -421,16 +506,25 @@ def build(spec, cues, path):
     root_css = (f":root{{--bg:{pal['bg']};--bg2:{pal['bg2']};--a1:{pal['a1']};"
                 f"--a2:{pal['a2']};--a3:{pal['a3']}}}")
     board_css = board_mod.BOARD_CSS.replace('__FONT__', board_mod.assets()['font'])
-    html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{root_css}{CSS.replace('__W__', str(W)).replace('__H__', str(H))}{board_css}</style></head>
-<body><div id="stage">
+    paper = getattr(spec, 'palette', '') == 'paper'
+    extra_css = PAPER_CSS if paper else ''
+    body_cls = ' class="paper"' if paper else ''
+    html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{root_css}{CSS.replace('__W__', str(W)).replace('__H__', str(H))}{board_css}{extra_css}</style></head>
+<body{body_cls}><div id="stage">
 <div id="bggrid" style="opacity:{1 if bgstyle == 'grid' else 0}"></div><div id="bgdots" style="opacity:{1 if bgstyle == 'dots' else 0}"></div>
 <div class="glow" id="g1"></div><div class="glow" id="g2"></div><div class="glow" id="g3"></div>
 <div id="prog">{seg_html}</div>
 {''.join(markup)}
+<div class="mascot" id="mascot"><svg id="msvg" viewBox="0 0 220 270"></svg></div>
 <div id="cap"></div>
 </div>
 <script>{board_mod.assets()['rough']}\n{board_mod.BOARD_JS}\n{JS.replace('__SCENES__', json.dumps(scenes_js)).replace('__CAPS__', json.dumps(caps, ensure_ascii=False)).replace('__TOTAL__', f'{total:.3f}').replace('__DUR__', f'{total:.3f}')}</script>
 </body></html>'''
 
+    if not getattr(spec, 'mascot', False):
+        i = html.find('<div class="mascot" id="mascot">')
+        j = html.find('<div id="cap">')
+        if i > 0 and j > i:
+            html = html[:i] + html[j:]
     open(path, 'w', encoding='utf-8').write(html)
     return path, total
