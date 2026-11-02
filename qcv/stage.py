@@ -117,16 +117,16 @@ body.paper .typo .sub,body.paper .filmstrip .fr .d,body.paper .dgnode .s,
 body.paper .fnote{color:#4A5568}
 body.paper .hnum{color:var(--a2);text-shadow:none}
 body.paper .vscore{color:var(--a1);text-shadow:none}
-body.paper .htag{border-color:#D93A3A;color:#D93A3A}
+body.paper .htag{border-color:transparent;color:#D93A3A}
 body.paper .fhead{color:#1D1D1D;text-shadow:none}
 body.paper .faddr{color:var(--a1);text-shadow:none}
-body.paper #cap{color:#2A2F3A;text-shadow:none}
+body.paper #cap{color:#1D1D1D;font-weight:600;text-shadow:none}
 body.paper .seg{background:rgba(0,0,0,.10)}
 body.paper .ghost{color:rgba(20,20,20,.07)}
 body.paper .ghostline{background:rgba(20,20,20,.12)}
-body.paper .card{background:rgba(255,255,255,.8);border-color:rgba(47,107,255,.35);box-shadow:0 10px 30px rgba(60,50,30,.08)}
+body.paper .card{background:rgba(255,255,255,.8);border-color:transparent;box-shadow:0 10px 30px rgba(60,50,30,.08)}
 body.paper .filmstrip .fr{background:rgba(255,255,255,.8);border-color:rgba(0,0,0,.16)}
-body.paper .dgnode{background:rgba(255,255,255,.85);border-color:rgba(0,0,0,.18)}
+body.paper .dgnode{background:rgba(255,255,255,.85);border-color:transparent}
 body.paper .stepc{background:#fff}
 body.paper .typo .ln.acc{color:var(--a1)}
 """
@@ -163,9 +163,12 @@ function drawMascot(){
   const scr=rc.rectangle(48,54,124,52,{stroke:'#16233D',strokeWidth:3,roughness:1.2,fill:'#16233D',fillStyle:'solid'});
   svg.appendChild(scr);
   const eyes=document.createElementNS('http://www.w3.org/2000/svg','g'); eyes.id='eyes';
-  eyes.appendChild(rc.curve([[66,88],[74,74],[82,88]],{stroke:'#8FD0FF',strokeWidth:5,roughness:1.1}));
-  eyes.appendChild(rc.curve([[106,88],[114,74],[122,88]],{stroke:'#8FD0FF',strokeWidth:5,roughness:1.1}));
+  [[72,78],[116,78]].forEach(([cx,cy])=>{
+    const e=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    e.setAttribute('cx',cx);e.setAttribute('cy',cy);e.setAttribute('r',9);
+    e.setAttribute('fill','#8FD0FF');eyes.appendChild(e);});
   svg.appendChild(eyes);
+  svg.appendChild(rc.curve([[92,94],[104,102],[118,94]],{stroke:'#8FD0FF',strokeWidth:4,roughness:1.1}));
   svg.appendChild(rc.line(110,36,110,14,o));
   const ball=rc.circle(110,10,14,{stroke:B,strokeWidth:3,fill:B,fillStyle:'solid'}); svg.appendChild(ball);
   const body=rc.rectangle(58,140,104,66,{...o,fill:F,fillStyle:'hachure',hachureGap:8,hachureAngle:-38});
@@ -183,13 +186,56 @@ function drawMascot(){
   svg.appendChild(rc.ellipse(144,242,30,12,{...o,fill:'#fff',fillStyle:'solid'}));
 }
 
+function inkFor(el,opt){
+  const sc=el.closest('.scene'); if(!sc) return;
+  let svg=sc.querySelector('svg.inksvg');
+  if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','inksvg');svg.setAttribute('viewBox','0 0 1080 1920');
+    svg.style.cssText='position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none';
+    sc.appendChild(svg);}
+  const rc=rough.svg(svg), sr=sc.getBoundingClientRect(), r=el.getBoundingClientRect();
+  svg.appendChild(rc.rectangle(r.left-sr.left-6,r.top-sr.top-6,r.width+12,r.height+12,opt));
+}
+function inkLine(el,opt,pad){
+  const sc=el.closest('.scene'); if(!sc) return;
+  let svg=sc.querySelector('svg.inksvg');
+  if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','inksvg');svg.setAttribute('viewBox','0 0 1080 1920');
+    svg.style.cssText='position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none';
+    sc.appendChild(svg);}
+  const rc=rough.svg(svg), sr=sc.getBoundingClientRect(), r=el.getBoundingClientRect();
+  svg.appendChild(rc.line(r.left-sr.left+pad,r.bottom-sr.top+4,r.right-sr.left-pad,r.bottom-sr.top+8,opt));
+}
+function drawInk(){
+  if(!document.body.classList.contains('paper')||typeof rough==='undefined') return;
+  document.querySelectorAll('.dgnode').forEach((el,k)=>{
+    inkFor(el,{stroke:'#2F6BFF',strokeWidth:3,roughness:1.7,bowing:1.4,
+      fill:'rgba(47,107,255,.05)',fillStyle:'hachure',hachureGap:10,fillWeight:1,seed:11+k});});
+  document.querySelectorAll('.card').forEach((el,k)=>{
+    inkFor(el,{stroke:'#2F6BFF',strokeWidth:2.6,roughness:1.6,seed:31+k});});
+  document.querySelectorAll('.htag').forEach(el=>{
+    inkFor(el,{stroke:'#D93A3A',strokeWidth:3.4,roughness:2.1,bowing:2,seed:77});});
+  document.querySelectorAll('.hnum').forEach((el,k)=>{
+    const sc=el.closest('.scene'); if(!sc) return;
+    let svg=sc.querySelector('svg.inksvg');
+    if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('class','inksvg');svg.setAttribute('viewBox','0 0 1080 1920');
+      svg.style.cssText='position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none';
+      sc.appendChild(svg);}
+    const rc2=rough.svg(svg), sr=sc.getBoundingClientRect(), r=el.getBoundingClientRect();
+    const cx=(r.left+r.right)/2-sr.left, y=r.bottom-sr.top+2;
+    svg.appendChild(rc2.line(cx-235,y,cx+235,y+4,{stroke:'#FF7A3D',strokeWidth:7,roughness:2.2,seed:91+k}));});
+  document.querySelectorAll('.faddr').forEach((el,k)=>{
+    inkLine(el,{stroke:'#2F6BFF',strokeWidth:9,roughness:2.2,seed:131+k},40);});
+}
+
 function fitGhosts(){
   document.querySelectorAll('.ghost').forEach(g=>{
     const w=g.scrollWidth; if(w>1010){g.style.transformOrigin='center';g.style.transform='scale('+(1010/w).toFixed(3)+')';}
   });
 }
 window.setTime=function(t){
-  if(!window.__gf){fitGhosts();window.__gf=1;}
+  if(!window.__gf){fitGhosts();drawInk();window.__gf=1;}
   const m=document.getElementById('mascot');
   if(m){
     if(!m.dataset.drawn){drawMascot();m.dataset.drawn='1';}
@@ -338,8 +384,9 @@ window.setTime=function(t){
     cap.style.opacity=clamp((t-act[0])/0.2).toFixed(2);
     const cur=SCENES.find(s=>t>=s.start&&t<s.end);
     const onBoard=!!(cur&&cur.kind==='board');
-    cap.style.color=onBoard?'#1D1D1D':'#E8FBFF';
-    cap.style.textShadow=onBoard?'none':'0 3px 20px rgba(0,0,0,.9)';
+    const isPaper=document.body.classList.contains('paper');
+    cap.style.color=(onBoard||isPaper)?'#1D1D1D':'#E8FBFF';
+    cap.style.textShadow=(onBoard||isPaper)?'none':'0 3px 20px rgba(0,0,0,.9)';
   }
   else cap.style.opacity='0';
 };
@@ -515,6 +562,7 @@ def build(spec, cues, path):
 <div class="glow" id="g1"></div><div class="glow" id="g2"></div><div class="glow" id="g3"></div>
 <div id="prog">{seg_html}</div>
 {''.join(markup)}
+<svg id="ink" width="1080" height="1920" style="position:absolute;inset:0;pointer-events:none;z-index:6"></svg>
 <div class="mascot" id="mascot"><svg id="msvg" viewBox="0 0 220 270"></svg></div>
 <div id="cap"></div>
 </div>
