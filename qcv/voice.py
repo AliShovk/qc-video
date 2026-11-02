@@ -1,8 +1,12 @@
 """Озвучка через Silero + тайминги + SRT.
 
+Silero обрывает фразу на латинском домене («qantcore.space»), поэтому
+перед синтезом домен заменяется на «на сайте»: адрес остаётся на экране.",
+
 Голосовой профиль зафиксирован: Silero v4_ru, спикер eugene, темп 0.94.
 Это тот голос, которым собраны ролики Manus, LTX и Cherry Studio.
 """
+import re
 import sys
 
 sys.path.insert(0, '/opt/qantcore/minibot')
@@ -20,6 +24,17 @@ VOICE_PROFILE = {
 }
 
 
+DOMAIN_RE = re.compile(r'\b(?:[a-z0-9-]+\.)+(?:space|ru|com|ai|io|dev|org)\b', re.I)
+
+
+def speech_text(line: str) -> str:
+    """Текст для синтеза: домены заменяем, чтобы Silero не обрывал фразу."""
+    t = re.sub(r'\s+на\s+' + DOMAIN_RE.pattern, ' на сайте', line, flags=re.I)
+    t = DOMAIN_RE.sub('сайте', t)
+    t = re.sub(r'\s{2,}', ' ', t).strip()
+    return t
+
+
 def narrate(lines, out_wav, speaker=None, rate=None, lead=None, gap=None):
     speaker = speaker or VOICE_PROFILE['speaker']
     rate = VOICE_PROFILE['rate'] if rate is None else rate
@@ -27,7 +42,8 @@ def narrate(lines, out_wav, speaker=None, rate=None, lead=None, gap=None):
     gap = VOICE_PROFILE['gap'] if gap is None else gap
 
     n = Narrator(speaker=speaker, lead=lead, gap=gap, length_scale=rate)
-    cues = [n.add(t) for t in lines]
+    spoken = [speech_text(t) for t in lines]
+    cues = [n.add(t) for t in spoken]
     n.write(out_wav)
     n.cleanup()
     return cues

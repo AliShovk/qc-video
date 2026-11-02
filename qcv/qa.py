@@ -11,7 +11,7 @@ def _probe(path, entries):
     return dict(l.split('=', 1) for l in out.strip().splitlines() if '=' in l)
 
 
-def check(path, expect=None, tol=0.12):
+def check(path, expect=None, tol=0.12, cues=None, lines=None):
     info = _probe(path, 'format=duration:stream=width,height,codec_name')
     dur = float(info.get('duration', 0))
     res = {'path': path, 'duration': round(dur, 2),
@@ -37,6 +37,17 @@ def check(path, expect=None, tol=0.12):
             problems.append(f'средняя громкость {res["mean_db"]} dB вне коридора')
     else:
         problems.append('нет звуковой дорожки')
+
+    if cues and lines:
+        fast = []
+        for (a, b), txt in zip(cues, lines):
+            dur = max(0.05, b - a)
+            rate = len(txt) / dur
+            if rate > 26:
+                fast.append(f'{txt[:40]!r} — {rate:.0f} симв/с')
+        if fast:
+            problems.append('похоже на обрыв озвучки: ' + '; '.join(fast[:2]))
+        res['speech_min'] = round(min((b - a) for a, b in cues), 2)
 
     res['problems'] = problems
     res['ok'] = not problems

@@ -18,7 +18,8 @@ def cmd_make(args):
     lines = [s.say for s in sp.scenes]
     wav = os.path.join(work, 'voice.wav')
     cues = voice.narrate(lines, wav, speaker=sp.speaker, rate=sp.rate)
-    srt = voice.write_srt(cues, lines, os.path.join(work, f'{sp.slug}.srt'))
+    srt = voice.write_srt(cues, [voice.speech_text(t) for t in lines],
+                          os.path.join(work, f'{sp.slug}.srt'))
     print(f'[2/7] озвучка: {cues[-1][1]:.1f} с речи')
 
     html = os.path.join(work, 'scene.html')
@@ -38,7 +39,7 @@ def cmd_make(args):
     assemble.mux(video, os.path.join(work, 'master.m4a'), final, total)
     print(f'[5/7] сборка: {final}')
 
-    report = qa.check(final, expect=total)
+    report = qa.check(final, expect=total, cues=cues, lines=lines)
     print(f'[6/7] QA: {"ок" if report["ok"] else report["problems"]}')
     print(json.dumps(report, ensure_ascii=False))
 
