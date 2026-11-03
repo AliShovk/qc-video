@@ -5,7 +5,10 @@
   "palette": "paper",
   "bg": "dots",
   "mascot": true,
-  "voice": {"speaker": "eugene", "rate": 0.94},
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
   "out": "deepseek-superagent.mp4",
   "scenes": [
     {
@@ -22,7 +25,12 @@
       "label": "цифры проекта",
       "value": "12 740",
       "title": "звёзд меньше чем за трое суток",
-      "items": ["1 318 форков", "MIT и TypeScript", "npm-пакет @deepseek-ai/dsh", "research-прототип"],
+      "items": [
+        "1 318 форков",
+        "MIT и TypeScript",
+        "npm-пакет @deepseek-ai/dsh",
+        "research-прототип"
+      ],
       "pose": "think",
       "say": "Двенадцать тысяч семьсот сорок звёзд, тысяча триста восемнадцать форков, лицензия MIT — и всё это исследовательский прототип.",
       "cap": "12 740 звёзд · 1 318 форков · MIT"
@@ -30,9 +38,18 @@
     {
       "type": "diagram",
       "nodes": [
-        {"t": "GitHub и рабочий чат", "s": "очередь задач, Pull Request"},
-        {"t": "Super-Agent", "s": "сам берёт задачу без команды"},
-        {"t": "правка и проверка", "s": "каждое действие по правам"}
+        {
+          "t": "GitHub и рабочий чат",
+          "s": "очередь задач, Pull Request"
+        },
+        {
+          "t": "Super-Agent",
+          "s": "сам берёт задачу без команды"
+        },
+        {
+          "t": "правка и проверка",
+          "s": "каждое действие по правам"
+        }
       ],
       "pose": "idle",
       "say": "Смысл проактивности такой: задачи приходят из репозитория и чата, агент берёт их сам, а не ждёт вашей команды.",
@@ -41,7 +58,9 @@
     {
       "type": "code",
       "label": "terminal",
-      "lines": ["npm i @deepseek-ai/dsh"],
+      "lines": [
+        "npm i @deepseek-ai/dsh"
+      ],
       "pose": "point",
       "say": "Ставится как плагин-бандл: команда на экране, дальше запуск через DeepSeek Harness.",
       "cap": "npm i @deepseek-ai/dsh"
@@ -56,5 +75,6 @@
       "say": "Полный разбор — на сайте!",
       "cap": "qantcore.space"
     }
-  ]
+  ],
+  "cover": "/var/www/qantcore/images/covers/deepseek-superagent-cover.png"
 }

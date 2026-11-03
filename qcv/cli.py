@@ -35,16 +35,25 @@ def cmd_make(args):
     mix = audio.mix(wav, bed, os.path.join(work, 'mix.wav'), total)
     mux = assemble.mux(video, mix, os.path.join(work, f'{sp.slug}_raw.mp4'), total)
     final = os.path.join(work, sp.out)
-    audio.master(mix, os.path.join(work, 'master.m4a'), total)
-    assemble.mux(video, os.path.join(work, 'master.m4a'), final, total)
-    print(f'[5/7] сборка: {final}')
+    master = os.path.join(work, 'master.m4a')
+    audio.master(mix, master, total)
 
     cover_png = None
     try:
         cover_png = cover_mod.make(sp, os.path.join(work, f'{sp.slug}-cover.png'))
-        print(f'      обложка: {cover_png}')
     except Exception as e:
         print(f'      обложка не собралась: {e}')
+
+    if cover_png:
+        intro = 1.6
+        vid = assemble.with_cover(video, cover_png, os.path.join(work, 'video_cover.mp4'), intro)
+        aud = assemble.delay_audio(master, os.path.join(work, 'master_delayed.m4a'), int(intro * 1000))
+        assemble.mux(vid, aud, final, total + intro)
+        cues = [(a + intro, b + intro) for a, b in cues]
+        total += intro
+    else:
+        assemble.mux(video, master, final, total)
+    print(f'[5/7] сборка: {final}')
 
     report = qa.check(final, expect=total, cues=cues, lines=lines)
     print(f'[6/7] QA: {"ок" if report["ok"] else report["problems"]}')

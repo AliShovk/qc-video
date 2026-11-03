@@ -32,3 +32,25 @@ def mux(video, audio, out, dur):
         'ffmpeg', '-y', '-v', 'error', '-i', video, '-i', audio,
         '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-t', f'{dur:.2f}', out], check=True)
     return out
+
+
+def with_cover(video, cover_png, out, dur=1.6):
+    """Приклеивает обложку первым кадром — видео всегда открывается титульником."""
+    subprocess.run([
+        'ffmpeg', '-y', '-v', 'error',
+        '-loop', '1', '-framerate', str(FPS), '-t', f'{dur:.2f}', '-i', cover_png,
+        '-i', video,
+        '-filter_complex',
+        f'[0:v]scale={W}:{H},setsar=1,fps={FPS},format=yuv420p[v0];'
+        f'[1:v]setsar=1,fps={FPS},format=yuv420p[v1];[v0][v1]concat=n=2:v=1:a=0[v]',
+        '-map', '[v]', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19',
+        '-pix_fmt', 'yuv420p', out], check=True)
+    return out
+
+
+def delay_audio(audio, out, ms):
+    """Сдвигает звук вправо, чтобы он совпал с видео после обложки."""
+    subprocess.run([
+        'ffmpeg', '-y', '-v', 'error', '-i', audio,
+        '-af', f'adelay={ms}|{ms}', '-c:a', 'aac', '-b:a', '192k', out], check=True)
+    return out

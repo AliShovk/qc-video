@@ -111,8 +111,16 @@ h1{{position:absolute;left:80px;top:250px;width:920px;font-size:{size}px;line-he
 
 
 def make(spec, out_png):
-    """Рисует обложку из спеки. Возвращает путь к PNG."""
+    """Рисует обложку из спеки. Возвращает путь к PNG.
+
+    Если в спеке указан готовый файл (`cover`), используется он.
+    """
     os.makedirs(os.path.dirname(out_png), exist_ok=True)
+    custom = (getattr(spec, 'cover', '') or '').strip()
+    if custom and os.path.exists(custom):
+        import shutil
+        shutil.copy(custom, out_png)
+        return out_png
     html_path = out_png.replace('.png', '.html')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(_html(spec, out_png))
