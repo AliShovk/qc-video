@@ -276,7 +276,8 @@ window.setTime=function(t){
   const m=document.getElementById('mascot');
   if(m){
     if(!m.dataset.drawn){drawMascot();m.dataset.drawn='1';}
-    m.style.opacity=1;
+    const cs=SCENES.find(s=>t>=s.start&&t<s.end);
+    m.style.opacity=(cs&&cs.mascot===false)?0:1;
     const bob=Math.sin(t*2.2)*4;
     const lift=parseFloat(m.dataset.lift||0), sc=parseFloat(m.dataset.sc||1);
     m.style.transform='translateY('+(bob+lift).toFixed(1)+'px) scale('+sc+')';
@@ -450,7 +451,8 @@ def build(spec, cues, path):
     for i, (sc, (a, b)) in enumerate(zip(spec.scenes, cues)):
         end = cues[i + 1][0] if i + 1 < len(cues) else total
         scenes_js.append({'start': round(a, 3), 'end': round(end, 3), 'kind': sc.kind,
-                          'pose': sc.data.get('pose', 'idle')})
+                          'pose': sc.data.get('pose', 'idle'),
+                          'mascot': sc.data.get('mascot', True)})
         cap = sc.cap or (sc.say if len(sc.say) <= 70 else sc.say[:67].rsplit(' ', 1)[0] + '…')
         if sc.kind == 'final' and cap.strip().lower() == str(sc.data.get('address', '')).lower():
             cap = ''
