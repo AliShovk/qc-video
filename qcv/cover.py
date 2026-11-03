@@ -54,11 +54,13 @@ def find_logo(spec):
             if os.path.splitext(f)[0] == base:
                 return os.path.join(d, f)
         # слаг начинается с имени логотипа: cline-code -> cline
+        norm = base.replace('-', '').replace('_', '')
         best = ''
-        head = base.split('-')[0]
         for f in files:
             name = os.path.splitext(f)[0]
-            if (base.startswith(name) or name.startswith(head)) and len(name) > len(best):
+            nname = name.replace('-', '').replace('_', '')
+            same_head = name.split('-')[0].lower() == base.split('-')[0].lower()
+            if (norm.startswith(nname) or nname.startswith(norm) or same_head) and len(name) > len(best):
                 best = name
         if best:
             for f in files:
