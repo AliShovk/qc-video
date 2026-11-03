@@ -598,8 +598,9 @@ def build(spec, cues, path):
     seg_html = ''.join('<div class="seg"><div class="segfill"></div></div>' for _ in spec.scenes)
     pal = PALETTES.get(getattr(spec, 'palette', 'teal'), PALETTES['teal'])
     bgstyle = getattr(spec, 'bgstyle', 'mesh')
+    ink = '#1D1D1D' if getattr(spec, 'palette', '') == 'paper' else '#E8FBFF'
     root_css = (f":root{{--bg:{pal['bg']};--bg2:{pal['bg2']};--a1:{pal['a1']};"
-                f"--a2:{pal['a2']};--a3:{pal['a3']}}}")
+                f"--a2:{pal['a2']};--a3:{pal['a3']};--ink:{ink}}}")
     board_css = board_mod.BOARD_CSS.replace('__FONT__', board_mod.assets()['font'])
     paper = getattr(spec, 'palette', '') == 'paper'
     extra_css = PAPER_CSS if paper else ''
