@@ -122,7 +122,7 @@ def main(argv=None):
     u.add_argument('--title')
     u.add_argument('--description')
     u.add_argument('--tags', default='')
-    u.add_argument('--privacy', default='unlisted', choices=['private', 'unlisted', 'public'])
+    u.add_argument('--privacy', default='public', choices=['private', 'unlisted', 'public'])
     u.add_argument('--site', default='qantcore.space')
     u.set_defaults(func=cmd_upload)
 

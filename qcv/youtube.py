@@ -12,8 +12,7 @@ import requests
 
 CLIENT = '/root/qc-video/youtube-client.json'
 TOKEN = '/root/qc-video/youtube-token.json'
-SCOPES = ['https://www.googleapis.com/auth/youtube.upload',
-          'https://www.googleapis.com/auth/youtube.readonly']
+SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
 REDIRECT = 'http://127.0.0.1:8080/'
 AUTH = 'https://accounts.google.com/o/oauth2/v2/auth'
 TOK = 'https://oauth2.googleapis.com/token'
