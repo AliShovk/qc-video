@@ -30,6 +30,7 @@ class Spec:
     bgstyle: str = 'mesh'
     mascot: bool = False
     cover: str = ''
+    logo: str = ''
     out_name: str = ''
 
     @property
@@ -69,6 +70,7 @@ def load(path: str) -> Spec:
         bgstyle=raw.get('bg', 'mesh'),
         mascot=bool(raw.get('mascot', False)),
         cover=raw.get('cover', ''),
+        logo=raw.get('logo', ''),
         out_name=raw.get('out', ''),
         scenes=scenes,
     )
