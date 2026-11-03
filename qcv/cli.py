@@ -4,7 +4,7 @@ import json
 import os
 import sys
 
-from . import assemble, audio, cover as cover_mod, publish as publish_mod, qa, spec as spec_mod, stage, voice
+from . import assemble, audio, cover as cover_mod, publish as publish_mod, qa, spec as spec_mod, stage, voice, youtube
 
 WORK = '/root/qc-video/builds'
 
@@ -75,6 +75,33 @@ def cmd_make(args):
     return 0 if report['ok'] else 1
 
 
+def cmd_yt_auth(args):
+    if args.code:
+        t = youtube.exchange(args.code)
+        print('токен сохранён:', youtube.TOKEN)
+        ch = youtube.channel()
+        print('канал:', ch.get('snippet', {}).get('title'), ch.get('id'))
+        return 0
+    print(youtube.auth_url())
+    return 0
+
+
+def cmd_upload(args):
+    sp = spec_mod.load(args.spec)
+    video = args.file or os.path.join('/root/qc-video/builds', sp.slug, sp.out)
+    cover = args.cover or f'/var/www/qantcore/images/covers/{sp.slug}.png'
+    if not os.path.exists(video):
+        raise SystemExit(f'нет файла {video}')
+    title = args.title or f'{sp.title} — {sp.kicker}'
+    desc = args.description or (
+        f'{title}\n\nКороткий разбор на {args.site}.\n'
+        f'Полный обзор: {args.site}')
+    vid = youtube.upload(video, title, desc, tags=args.tags.split(',') if args.tags else [],
+                         privacy=args.privacy, cover=cover)
+    print('https://youtu.be/' + vid)
+    return 0
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog='qc-video')
     sub = p.add_subparsers(dest='cmd', required=True)
@@ -84,6 +111,21 @@ def main(argv=None):
     m.add_argument('--force', action='store_true', help='не падать на предупреждениях QA')
     m.add_argument('--port', type=int, default=9611)
     m.set_defaults(func=cmd_make)
+    a = sub.add_parser('yt-auth', help='получить OAuth-токен YouTube')
+    a.add_argument('--code', help='код/адрес после согласия')
+    a.set_defaults(func=cmd_yt_auth)
+
+    u = sub.add_parser('upload', help='загрузить готовый ролик на YouTube')
+    u.add_argument('spec')
+    u.add_argument('--file')
+    u.add_argument('--cover')
+    u.add_argument('--title')
+    u.add_argument('--description')
+    u.add_argument('--tags', default='')
+    u.add_argument('--privacy', default='unlisted', choices=['private', 'unlisted', 'public'])
+    u.add_argument('--site', default='qantcore.space')
+    u.set_defaults(func=cmd_upload)
+
     args = p.parse_args(argv)
     return args.func(args)
 
