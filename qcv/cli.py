@@ -57,7 +57,8 @@ def cmd_make(args):
         assemble.mux(video, master, final, total)
     print(f'[5/7] сборка: {final}')
 
-    report = qa.check(final, expect=total, cues=cues, lines=lines)
+    report = qa.check(final, expect=total, cues=cues,
+                      lines=[voice.speech_text(t) for t in lines])
     print(f'[6/7] QA: {"ок" if report["ok"] else report["problems"]}')
     print(json.dumps(report, ensure_ascii=False))
 
