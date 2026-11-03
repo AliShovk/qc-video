@@ -440,6 +440,10 @@ def _esc(s):
     return (str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
 
 
+def _ghost_size(title):
+    return max(44, min(180, int(940 / (0.72 * max(4, len(title.upper()))))))
+
+
 def build(spec, cues, path):
     total = cues[-1][1] + 2.4
     scenes_js, caps, markup = [], [], []
@@ -573,7 +577,7 @@ def build(spec, cues, path):
                 parts.append(f'<div class="statv" id="s{i}v{k}" style="top:{top}px">0</div>'
                              f'<div class="statl" id="s{i}l{k}" style="top:{top + 170}px">{_esc(it.get("label", ""))}</div>')
             scenes_js[-1]['items'] = parsed
-            m = ''.join(parts) + f'<div class="ghostline"></div><div class="ghost" style="font-size:{104 if len(spec.title) > 9 else 130}px">{_esc(spec.title.upper())}</div>'
+            m = ''.join(parts) + f'<div class="ghostline"></div><div class="ghost" style="font-size:{_ghost_size(spec.title)}px">{_esc(spec.title.upper())}</div>'
         elif sc.kind == 'cards':
             items = sc.data.get('items', [])[:3]
             parsed = [{'title': it.get('title', ''), 'text': it.get('text', '')} for it in items]
