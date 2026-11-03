@@ -25,7 +25,7 @@ def _client():
     return json.load(open(CLIENT))
 
 
-def auth_url():
+def auth_url(prompt='consent'):
     c = _client()
     from urllib.parse import urlencode
     q = {
@@ -34,7 +34,7 @@ def auth_url():
         'response_type': 'code',
         'scope': ' '.join(SCOPES),
         'access_type': 'offline',
-        'prompt': 'consent',
+        'prompt': prompt,
         'include_granted_scopes': 'true',
     }
     return f'{AUTH}?{urlencode(q)}'
@@ -86,6 +86,17 @@ def channel():
     r.raise_for_status()
     items = r.json().get('items', [])
     return items[0] if items else {}
+
+
+def ensure_channel(expected=None):
+    """Защита от загрузки не в тот канал."""
+    expected = expected or os.environ.get('QC_YT_CHANNEL', 'UCm2yfC77es1hLJBs3_dbLoA')
+    ch = channel()
+    cid = ch.get('id', '')
+    if expected and cid != expected:
+        raise SystemExit(f'токен от канала {ch.get("snippet", {}).get("title")} ({cid}), '
+                         f'а нужен {expected}')
+    return ch
 
 
 def upload(video, title, description='', tags=None, privacy='unlisted',
