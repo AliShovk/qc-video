@@ -1,0 +1,82 @@
+{
+  "slug": "cline-setup-video",
+  "title": "CLINE",
+  "kicker": "гайд",
+  "palette": "paper",
+  "bg": "dots",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "cline-setup-video.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "6",
+      "unit": "способов установки",
+      "tag": "от VS Code до SDK",
+      "pose": "point",
+      "say": "Шесть способов поставить Cline: расширение, плагин, консоль, приложение и SDK.",
+      "cap": "6 способов установки"
+    },
+    {
+      "type": "split",
+      "label": "поверхности",
+      "value": "6",
+      "title": "входов в одного агента",
+      "pose": "think",
+      "items": [
+        "VS Code",
+        "JetBrains",
+        "CLI",
+        "Desktop",
+        "SDK",
+        "Kanban"
+      ],
+      "say": "Один движок: редактор, консоль, приложение, SDK и канбан-доска.",
+      "cap": "VS Code · JetBrains · CLI · SDK"
+    },
+    {
+      "type": "diagram",
+      "pose": "idle",
+      "nodes": [
+        {
+          "t": "модель",
+          "s": "свой ключ или локальная"
+        },
+        {
+          "t": "Cline",
+          "s": "читает проект и планирует"
+        },
+        {
+          "t": "действия",
+          "s": "файлы, терминал, браузер"
+        }
+      ],
+      "say": "Агент читает проект, планирует шаги и действует в файлах, терминале и браузере.",
+      "cap": "модель → агент → действия"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "pose": "point",
+      "lines": [
+        "npm i -g cline",
+        "cline --version"
+      ],
+      "say": "Консольная установка — две команды на экране.",
+      "cap": "npm i -g cline"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "Cline: установка, ключи и первая задача",
+      "address": "qantcore.space",
+      "note": "гайды по coding-агентам",
+      "pose": "cheer",
+      "say": "Полный гайд — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}

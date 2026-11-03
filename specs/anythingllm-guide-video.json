@@ -1,0 +1,79 @@
+{
+  "slug": "anythingllm-guide-video",
+  "title": "ANYTHINGLLM",
+  "kicker": "гайд",
+  "palette": "paper",
+  "bg": "grid",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "anythingllm-guide-video.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "30 000",
+      "unit": "звёзд на GitHub",
+      "tag": "чат с вашими PDF без облака",
+      "pose": "point",
+      "say": "Тридцать тысяч звёзд на Гитхабе: чат с документами, который работает без облака.",
+      "cap": "30 000 звёзд — чат с PDF"
+    },
+    {
+      "type": "diagram",
+      "pose": "idle",
+      "nodes": [
+        {
+          "t": "ваши документы",
+          "s": "PDF, код, таблицы"
+        },
+        {
+          "t": "локальный индекс",
+          "s": "векторный поиск на диске"
+        },
+        {
+          "t": "ответ",
+          "s": "со ссылкой на источник"
+        }
+      ],
+      "say": "Документы индексируются локально, а ответ приходит со ссылкой на источник.",
+      "cap": "документы → индекс → ответ"
+    },
+    {
+      "type": "split",
+      "label": "что внутри",
+      "value": "4096",
+      "title": "токенов контекста в бесплатной версии",
+      "pose": "think",
+      "items": [
+        "Docker или десктоп",
+        "локальные модели через Ollama",
+        "API-интеграции",
+        "15 минут на запуск"
+      ],
+      "say": "Внутри четыре тысячи токенов контекста, запуск через Docker или приложение и локальные модели.",
+      "cap": "4096 токенов · 15 минут"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "pose": "point",
+      "lines": [
+        "docker run -d -p 3001:3001 mintplexlabs/anythingllm"
+      ],
+      "say": "Запуск в докере — одна команда, она на экране.",
+      "cap": "docker run anythingllm"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "AnythingLLM: установка, документы и локальные модели",
+      "address": "qantcore.space",
+      "note": "гайды по RAG",
+      "pose": "cheer",
+      "say": "Полный гайд — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}

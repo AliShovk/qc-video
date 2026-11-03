@@ -1,0 +1,81 @@
+{
+  "slug": "dify-guide-video",
+  "title": "DIFY",
+  "kicker": "гайд",
+  "palette": "paper",
+  "bg": "dots",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "dify-guide-video.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "30",
+      "unit": "минут до self-host",
+      "tag": "конструктор AI-приложений",
+      "pose": "point",
+      "say": "Тридцать минут — и платформа для AI-приложений работает на вашем сервере.",
+      "cap": "30 минут до self-host"
+    },
+    {
+      "type": "diagram",
+      "pose": "idle",
+      "nodes": [
+        {
+          "t": "Docker Compose",
+          "s": "поднимает сервисы"
+        },
+        {
+          "t": "модель и база",
+          "s": "LLM плюс знания"
+        },
+        {
+          "t": "приложение",
+          "s": "публикация наружу"
+        }
+      ],
+      "say": "Docker поднимает сервисы, подключаются модель и база знаний, приложение публикуется наружу.",
+      "cap": "Docker → модель → приложение"
+    },
+    {
+      "type": "split",
+      "label": "что умеет",
+      "value": "1",
+      "title": "конструктор вместо кода",
+      "pose": "think",
+      "items": [
+        "визуальные workflow",
+        "RAG по документам",
+        "агенты и инструменты",
+        "публикация API"
+      ],
+      "say": "Визуальные сценарии, поиск по документам, агенты с инструментами и публикация через API.",
+      "cap": "workflow · RAG · агенты"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "pose": "point",
+      "lines": [
+        "git clone dify",
+        "cd dify/docker",
+        "docker compose up -d"
+      ],
+      "say": "Установка сводится к клонированию и одной команде докера.",
+      "cap": "docker compose up -d"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "Dify: установка, база знаний и публикация",
+      "address": "qantcore.space",
+      "note": "гайды по AI-платформам",
+      "pose": "cheer",
+      "say": "Полный гайд — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "slug": "docker-agent-video",
+  "title": "DOCKER ДЛЯ АГЕНТА",
+  "kicker": "гайд",
+  "palette": "paper",
+  "bg": "grid",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "docker-agent-video.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "15",
+      "unit": "минут на деплой",
+      "tag": "Dockerfile, nginx и SSL",
+      "pose": "point",
+      "say": "Пятнадцать минут, чтобы вывести агента в продакшн: докер, прокси и сертификат.",
+      "cap": "15 минут до продакшна"
+    },
+    {
+      "type": "diagram",
+      "pose": "idle",
+      "nodes": [
+        {
+          "t": "Dockerfile",
+          "s": "образ с агентом"
+        },
+        {
+          "t": "nginx",
+          "s": "прокси и HTTPS"
+        },
+        {
+          "t": "healthcheck",
+          "s": "следит за живостью"
+        }
+      ],
+      "say": "Образ собирается из докерфайла, nginx держит HTTPS, healthcheck следит за сервисом.",
+      "cap": "образ → nginx → healthcheck"
+    },
+    {
+      "type": "split",
+      "label": "размер образа",
+      "value": "350",
+      "title": "мегабайт вместо двух гигабайт",
+      "pose": "think",
+      "items": [
+        "800 МБ — обычная сборка",
+        "350 МБ — многоступенчатая",
+        "2 ГБ — с лишними слоями",
+        "250 МБ — минимум"
+      ],
+      "say": "Многоступенчатая сборка даёт триста пятьдесят мегабайт вместо двух гигабайт.",
+      "cap": "350 МБ вместо 2 ГБ"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "pose": "point",
+      "lines": [
+        "docker compose up -d --build"
+      ],
+      "say": "Подъём всего стека — одна команда, она на экране.",
+      "cap": "docker compose up -d --build"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "Docker для AI-агента: образ, nginx, SSL",
+      "address": "qantcore.space",
+      "note": "гайды по деплою",
+      "pose": "cheer",
+      "say": "Полный гайд — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}

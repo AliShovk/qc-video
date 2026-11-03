@@ -1,0 +1,80 @@
+{
+  "slug": "langfuse-video",
+  "title": "LANGFUSE",
+  "kicker": "гайд",
+  "palette": "paper",
+  "bg": "grid",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "langfuse-video.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "$29",
+      "unit": "в месяц за Cloud",
+      "tag": "или self-host бесплатно",
+      "pose": "point",
+      "say": "Двадцать девять долларов за облако или бесплатный self-host — разбираем Langfuse.",
+      "cap": "$29 Cloud или self-host"
+    },
+    {
+      "type": "diagram",
+      "pose": "idle",
+      "nodes": [
+        {
+          "t": "ваш агент",
+          "s": "любой фреймворк"
+        },
+        {
+          "t": "SDK",
+          "s": "отправляет трейсы"
+        },
+        {
+          "t": "дашборд",
+          "s": "шаги, токены, ошибки"
+        }
+      ],
+      "say": "SDK отправляет трейсы, а в дашборде видно каждый шаг, расход токенов и ошибки.",
+      "cap": "агент → SDK → дашборд"
+    },
+    {
+      "type": "split",
+      "label": "тарифы",
+      "value": "$29",
+      "title": "за облако, self-host — бесплатно",
+      "pose": "think",
+      "items": [
+        "$29 — старт Cloud",
+        "$199 — командный",
+        "2 доллара за превышение",
+        "self-host без лимитов"
+      ],
+      "say": "Облако от двадцати девяти долларов, командный тариф — сто девяносто девять, self-host бесплатный.",
+      "cap": "$29 · $199 · self-host $0"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "pose": "point",
+      "lines": [
+        "docker compose up -d",
+        "pip install langfuse"
+      ],
+      "say": "Разворот и установка SDK — две команды, обе на экране.",
+      "cap": "docker compose up -d"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "Langfuse: self-host, Cloud и трассировка",
+      "address": "qantcore.space",
+      "note": "гайды по LLMOps",
+      "pose": "cheer",
+      "say": "Полный гайд — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}

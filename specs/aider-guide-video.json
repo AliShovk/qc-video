@@ -1,0 +1,80 @@
+{
+  "slug": "aider-guide-video",
+  "title": "AIDER",
+  "kicker": "гайд",
+  "palette": "paper",
+  "bg": "dots",
+  "mascot": true,
+  "voice": {
+    "speaker": "eugene",
+    "rate": 0.94
+  },
+  "out": "aider-guide-video.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "$0,27",
+      "unit": "за миллион токенов",
+      "tag": "и весь код в терминале",
+      "pose": "point",
+      "say": "Двадцать семь центов за миллион токенов — и программирование идёт прямо в терминале.",
+      "cap": "$0,27 за миллион токенов"
+    },
+    {
+      "type": "diagram",
+      "pose": "idle",
+      "nodes": [
+        {
+          "t": "ваш репозиторий",
+          "s": "git уже подключён"
+        },
+        {
+          "t": "Aider",
+          "s": "правит файлы и коммитит"
+        },
+        {
+          "t": "модель",
+          "s": "любая через API или локально"
+        }
+      ],
+      "say": "Aider видит репозиторий, правит файлы и сам делает коммиты, а модель можно выбрать любую.",
+      "cap": "репозиторий → Aider → коммит"
+    },
+    {
+      "type": "split",
+      "label": "почему терминал",
+      "value": "1",
+      "title": "окно вместо IDE и плагинов",
+      "pose": "think",
+      "items": [
+        "работает поверх git",
+        "видит весь проект",
+        "правит несколько файлов сразу",
+        "ставится через pip"
+      ],
+      "say": "Не нужна отдельная среда: одно окно, git под капотом и правки сразу в нескольких файлах.",
+      "cap": "1 окно вместо IDE"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "pose": "point",
+      "lines": [
+        "pip install aider-chat",
+        "aider --model deepseek"
+      ],
+      "say": "Установка и запуск — две команды, обе на экране.",
+      "cap": "pip install aider-chat"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ ГАЙД",
+      "sub": "Aider: установка, модели, флаги и git-workflow",
+      "address": "qantcore.space",
+      "note": "гайды по AI-кодингу",
+      "pose": "cheer",
+      "say": "Полный гайд — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}
