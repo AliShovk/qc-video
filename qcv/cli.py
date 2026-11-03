@@ -50,6 +50,8 @@ def cmd_make(args):
         aud = assemble.delay_audio(master, os.path.join(work, 'master_delayed.m4a'), int(intro * 1000))
         assemble.mux(vid, aud, final, total + intro)
         cues = [(a + intro, b + intro) for a, b in cues]
+        srt = voice.write_srt(cues, [voice.speech_text(t) for t in lines],
+                              os.path.join(work, f'{sp.slug}.srt'))
         total += intro
     else:
         assemble.mux(video, master, final, total)
