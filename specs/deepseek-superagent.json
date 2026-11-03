@@ -1,0 +1,60 @@
+{
+  "slug": "deepseek-superagent",
+  "title": "DEEPSEEK SUPER-AGENT",
+  "kicker": "обзор",
+  "palette": "paper",
+  "bg": "dots",
+  "mascot": true,
+  "voice": {"speaker": "eugene", "rate": 0.94},
+  "out": "deepseek-superagent.mp4",
+  "scenes": [
+    {
+      "type": "hook",
+      "num": "7,4",
+      "unit": "из 10 — Super-Agent",
+      "tag": "research-прототип за двое суток",
+      "pose": "point",
+      "say": "Семь и четыре из десяти. Репозиторий прожил двое суток и собрал двенадцать тысяч звёзд — разбираем DeepSeek Super-Agent.",
+      "cap": "7,4 из 10 — и 12 740 звёзд за двое суток"
+    },
+    {
+      "type": "split",
+      "label": "цифры проекта",
+      "value": "12 740",
+      "title": "звёзд меньше чем за трое суток",
+      "items": ["1 318 форков", "MIT и TypeScript", "npm-пакет @deepseek-ai/dsh", "research-прототип"],
+      "pose": "think",
+      "say": "Двенадцать тысяч семьсот сорок звёзд, тысяча триста восемнадцать форков, лицензия MIT — и всё это исследовательский прототип.",
+      "cap": "12 740 звёзд · 1 318 форков · MIT"
+    },
+    {
+      "type": "diagram",
+      "nodes": [
+        {"t": "GitHub и рабочий чат", "s": "очередь задач, Pull Request"},
+        {"t": "Super-Agent", "s": "сам берёт задачу без команды"},
+        {"t": "правка и проверка", "s": "каждое действие по правам"}
+      ],
+      "pose": "idle",
+      "say": "Смысл проактивности такой: задачи приходят из репозитория и чата, агент берёт их сам, а не ждёт вашей команды.",
+      "cap": "задача → агент → правка"
+    },
+    {
+      "type": "code",
+      "label": "terminal",
+      "lines": ["npm i @deepseek-ai/dsh"],
+      "pose": "point",
+      "say": "Ставится как плагин-бандл: команда на экране, дальше запуск через DeepSeek Harness.",
+      "cap": "npm i @deepseek-ai/dsh"
+    },
+    {
+      "type": "final",
+      "headline": "ПОЛНЫЙ РАЗБОР",
+      "sub": "DeepSeek Super-Agent: архитектура, права и риски",
+      "address": "qantcore.space",
+      "note": "обзоры и гайды по AI-агентам",
+      "pose": "cheer",
+      "say": "Полный разбор — на сайте!",
+      "cap": "qantcore.space"
+    }
+  ]
+}

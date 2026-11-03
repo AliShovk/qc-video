@@ -262,7 +262,13 @@ function setPose(p){
 }
 function fitGhosts(){
   document.querySelectorAll('.ghost').forEach(g=>{
-    const w=g.scrollWidth; if(w>1010){g.style.transformOrigin='center';g.style.transform='scale('+(1010/w).toFixed(3)+')';}
+    if(!g.dataset.wrapped){
+      g.innerHTML='<span style="display:inline-block;white-space:nowrap">'+g.innerHTML+'</span>';
+      g.dataset.wrapped='1';
+    }
+    const sp=g.firstElementChild;
+    const w=sp?sp.getBoundingClientRect().width:0;
+    if(w>1010){g.style.transformOrigin='center';g.style.transform='scale('+(1010/w).toFixed(3)+')';}
   });
 }
 window.setTime=function(t){
@@ -425,6 +431,7 @@ window.setTime=function(t){
   else cap.style.opacity='0';
 };
 setTime(0);
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){fitGhosts();});}
 window.applyFrame=window.setTime;
 """
 
@@ -451,9 +458,11 @@ def build(spec, cues, path):
                                       num=_esc(sc.data.get('num', '')),
                                       unit=_esc(sc.data.get('unit', '')),
                                       tag=_esc(sc.data.get('tag', '')))
-            m = m.replace('<div class="hnum"', f'<div class="brand">{_esc(spec.title.upper())}</div><div class="hnum"', 1)
-            gsz = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 10 else 112)
-            gsz = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 9 else 104)
+            _t = spec.title.upper()
+            _bs = 72 if len(_t) <= 12 else (58 if len(_t) <= 17 else 46)
+            m = m.replace('<div class="hnum"',
+                f'<div class="brand" style="font-size:{_bs}px;line-height:1.08;right:70px">{_esc(_t)}</div><div class="hnum"', 1)
+            gsz = max(46, min(180, int(980 / (0.70 * max(4, len(spec.title.upper()))))))
             m += (f'<div class="ghostline"></div>'
                   f'<div class="ghost" style="font-size:{gsz}px">{_esc(spec.title.upper())}</div>')
         elif sc.kind == 'verdict':
@@ -466,7 +475,7 @@ def build(spec, cues, path):
                                          score=_esc(sc.data.get('score', '')),
                                          note=_esc(sc.data.get('note', '')))
             m = m.replace('<div class="vscore"', f'<div class="brand sm">{_esc(spec.title.upper())}</div><div class="vscore"', 1)
-            gsz2 = 210 if len(spec.title) <= 6 else (150 if len(spec.title) <= 9 else 104)
+            gsz2 = max(46, min(180, int(980 / (0.70 * max(4, len(spec.title.upper()))))))
             m += f'<div class="ghost" style="font-size:{gsz2}px">{_esc(spec.title.upper())}</div>'
         elif sc.kind == 'steps':
             items = sc.data.get('items', [])[:4]
