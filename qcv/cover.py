@@ -94,19 +94,19 @@ body{{width:{W}px;height:{H}px;background:#F7F4EA;color:#1D1D1D;
  font-family:'DejaVu Sans',sans-serif;overflow:hidden}}
 .wrap{{position:relative;width:{W}px;height:{H}px;
  background-image:radial-gradient(rgba(0,0,0,.07) 1.7px,transparent 1.7px);background-size:44px 44px}}
-.logo{{position:absolute;left:80px;top:230px;width:190px;height:190px;border-radius:46px;
+.logo{{position:absolute;left:80px;top:225px;width:264px;height:264px;border-radius:62px;
  background:#fff;border:2px solid rgba(0,0,0,.07);box-shadow:0 12px 28px rgba(60,50,30,.12);
  display:flex;align-items:center;justify-content:center;overflow:hidden}}
-.logo img{{width:128px;height:128px;object-fit:contain;display:block}}
-.logo.mono{{font-size:96px;font-weight:800;color:#2F6BFF;background:#EDF1FF;border:none}}
+.logo img{{width:190px;height:190px;object-fit:contain;display:block}}
+.logo.mono{{font-size:132px;font-weight:800;color:#2F6BFF;background:#EDF1FF;border:none}}
 .kick{{position:absolute;left:80px;top:150px;font-size:26px;letter-spacing:.3em;color:#2F6BFF;font-weight:700}}
-h1{{position:absolute;left:80px;top:440px;width:920px;font-size:{size}px;line-height:.98;
+h1{{position:absolute;left:80px;top:545px;width:920px;font-size:{size}px;line-height:.98;
  letter-spacing:-.02em;font-weight:800}}
-.mark{{position:absolute;left:84px;top:660px;width:190px;height:12px}}
-.num{{position:absolute;left:78px;top:700px;font-size:180px;font-weight:800;line-height:1;color:#FF7A3D}}
-.unit{{position:absolute;left:84px;top:930px;width:820px;font-size:40px;color:#3A4452;line-height:1.3}}
-.tag{{position:absolute;left:80px;top:1050px;width:900px;padding:22px 26px;border:3px dashed #2F6BFF;
- border-radius:22px;font-size:34px;color:#2F6BFF;line-height:1.3}}
+.mark{{position:absolute;left:84px;top:742px;width:190px;height:12px}}
+.num{{position:absolute;left:78px;top:780px;font-size:156px;font-weight:800;line-height:1;color:#FF7A3D}}
+.unit{{position:absolute;left:84px;top:955px;width:820px;font-size:36px;color:#3A4452;line-height:1.3}}
+.tag{{position:absolute;left:80px;top:1055px;width:800px;padding:6px 0 6px 24px;
+ border-left:9px solid #FF7A3D;font-size:44px;font-weight:800;color:#1D1D1D;line-height:1.22}}
 .foot{{position:absolute;left:80px;bottom:130px;width:620px;font-size:34px;color:#4A5568}}
 .foot b{{display:block;font-size:56px;color:#1D1D1D;margin-bottom:8px}}
 .badge{{position:absolute;right:80px;bottom:120px;padding:16px 26px;border:3px dashed #2F6BFF;border-radius:18px;
