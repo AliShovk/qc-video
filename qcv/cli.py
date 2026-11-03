@@ -4,7 +4,7 @@ import json
 import os
 import sys
 
-from . import assemble, audio, publish as publish_mod, qa, spec as spec_mod, stage, voice
+from . import assemble, audio, cover as cover_mod, publish as publish_mod, qa, spec as spec_mod, stage, voice
 
 WORK = '/root/qc-video/builds'
 
@@ -39,6 +39,13 @@ def cmd_make(args):
     assemble.mux(video, os.path.join(work, 'master.m4a'), final, total)
     print(f'[5/7] сборка: {final}')
 
+    cover_png = None
+    try:
+        cover_png = cover_mod.make(sp, os.path.join(work, f'{sp.slug}-cover.png'))
+        print(f'      обложка: {cover_png}')
+    except Exception as e:
+        print(f'      обложка не собралась: {e}')
+
     report = qa.check(final, expect=total, cues=cues, lines=lines)
     print(f'[6/7] QA: {"ок" if report["ok"] else report["problems"]}')
     print(json.dumps(report, ensure_ascii=False))
@@ -47,10 +54,12 @@ def cmd_make(args):
         print('[7/7] публикация пропущена')
         return 0 if report['ok'] or args.force else 1
 
-    urls = publish_mod.publish(final, srt, name=sp.out)
+    urls = publish_mod.publish(final, srt, name=sp.out, cover=cover_png)
     print(f'[7/7] опубликовано: {urls["mp4"]}')
     if 'srt' in urls:
         print(f'      субтитры: {urls["srt"]}')
+    if 'cover' in urls:
+        print(f'      обложка:  {urls["cover"]}')
     return 0 if report['ok'] else 1
 
 
