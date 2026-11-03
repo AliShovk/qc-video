@@ -62,7 +62,7 @@ h1{{position:absolute;left:80px;top:250px;width:920px;font-size:{size}px;line-he
 .unit{{position:absolute;left:84px;top:790px;width:820px;font-size:40px;color:#3A4452;line-height:1.3}}
 .tag{{position:absolute;left:80px;top:900px;width:900px;padding:22px 26px;border:3px dashed #2F6BFF;
  border-radius:22px;font-size:34px;color:#2F6BFF;line-height:1.3}}
-.foot{{position:absolute;left:80px;bottom:130px;font-size:34px;color:#4A5568}}
+.foot{{position:absolute;left:80px;bottom:130px;width:620px;font-size:34px;color:#4A5568}}
 .foot b{{display:block;font-size:56px;color:#1D1D1D;margin-bottom:8px}}
 .badge{{position:absolute;right:80px;bottom:120px;padding:16px 26px;border:3px dashed #2F6BFF;border-radius:18px;
  font-size:30px;color:#2F6BFF;transform:rotate(-4deg)}}
@@ -76,7 +76,7 @@ h1{{position:absolute;left:80px;top:250px;width:920px;font-size:{size}px;line-he
 <div class="unit">{unit}</div>
 <div class="tag">{tag}</div>
 <svg id="bot" viewBox="0 0 300 340"></svg>
-<div class="foot"><b>qantcore.space</b>полный разбор и установка</div>
+<div class="foot"><b>qantcore.space</b>полный разбор</div>
 <div class="badge">видеоразбор</div>
 </div>
 <script>{rough}</script>
