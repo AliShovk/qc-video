@@ -12,7 +12,7 @@ qc-video make specs/manus-hook.json
 ## Формат «бумага»
 
 Рукописный стиль для обзоров: кремовая бумага, rough.js, скетч-робот с позами.
-Обложка 1080×1920 собирается автоматически из той же спеки. Описание и пример — [docs/FORMAT-paper.md](docs/FORMAT-paper.md), спеки `specs/cherry-paper.json` и `specs/ruflo-paper.json`.
+Каждый ролик начинается с обложки (1,6 с титульника), она же публикуется постером. Обложка 1080×1920 собирается автоматически из той же спеки. Описание и пример — [docs/FORMAT-paper.md](docs/FORMAT-paper.md), спеки `specs/cherry-paper.json` и `specs/ruflo-paper.json`.
 
 ## Что внутри
 
