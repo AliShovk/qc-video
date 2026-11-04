@@ -442,7 +442,7 @@ def _esc(s):
 
 
 def _ghost_size(title):
-    return max(44, min(180, int(940 / (0.72 * max(4, len(title.upper()))))))
+    return max(42, min(150, int(900 / (1.05 * max(4, len(title.upper()))))))
 
 
 def build(spec, cues, path):
@@ -460,15 +460,18 @@ def build(spec, cues, path):
             caps.append([round(a, 3), round(end - 0.05, 3), cap])
 
         if sc.kind == 'hook':
+            _tag = str(sc.data.get('tag', ''))
+            _tsize = 31 if len(_tag) <= 30 else (26 if len(_tag) <= 38 else 21)
             m = MARKUP['hook'].format(kicker=_esc(spec.kicker), i=i,
                                       num=_esc(sc.data.get('num', '')),
                                       unit=_esc(sc.data.get('unit', '')),
                                       tag=_esc(sc.data.get('tag', '')))
             _t = spec.title.upper()
             _bs = 72 if len(_t) <= 12 else (58 if len(_t) <= 17 else 46)
+            m = m.replace('<div class="htag"', f'<div class="htag" style="font-size:{_tsize}px"')
             m = m.replace('<div class="hnum"',
                 f'<div class="brand" style="font-size:{_bs}px;line-height:1.08;right:70px">{_esc(_t)}</div><div class="hnum"', 1)
-            gsz = max(46, min(180, int(980 / (0.70 * max(4, len(spec.title.upper()))))))
+            gsz = max(42, min(150, int(900 / (1.05 * max(4, len(spec.title.upper()))))))
             m += (f'<div class="ghostline"></div>'
                   f'<div class="ghost" style="font-size:{gsz}px">{_esc(spec.title.upper())}</div>')
         elif sc.kind == 'verdict':
@@ -481,7 +484,7 @@ def build(spec, cues, path):
                                          score=_esc(sc.data.get('score', '')),
                                          note=_esc(sc.data.get('note', '')))
             m = m.replace('<div class="vscore"', f'<div class="brand sm">{_esc(spec.title.upper())}</div><div class="vscore"', 1)
-            gsz2 = max(46, min(180, int(980 / (0.70 * max(4, len(spec.title.upper()))))))
+            gsz2 = max(42, min(150, int(900 / (1.05 * max(4, len(spec.title.upper()))))))
             m += f'<div class="ghost" style="font-size:{gsz2}px">{_esc(spec.title.upper())}</div>'
         elif sc.kind == 'steps':
             items = sc.data.get('items', [])[:4]
