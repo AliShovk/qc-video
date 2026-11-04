@@ -100,15 +100,15 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
 .mascot svg{width:100%;height:auto;display:block;overflow:visible}
 .mascot g{transition:transform .35s ease}
 .tut{position:absolute;inset:0}
-.tut .head{position:absolute;left:74px;right:74px;top:96px;font-size:66px;font-weight:800;line-height:1.06;color:#9AA1AC;letter-spacing:-.01em}
-.tut .head b{color:#1D1D1D}
+.tut .head{position:absolute;left:74px;right:74px;top:96px;font-size:66px;font-weight:800;line-height:1.06;color:var(--muted);letter-spacing:-.01em}
+.tut .head b{color:var(--ink)}
 .tut .rail{position:absolute;left:98px;top:330px;height:0;width:4px;background:rgba(47,107,255,.22);border-radius:2px}
 .tut .dot{position:absolute;left:76px;top:326px;width:46px;height:46px;border-radius:50%;background:#2F6BFF;color:#fff;
  font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(47,107,255,.35)}
 .tut .av{position:absolute;left:142px;top:316px;width:66px;height:66px;border-radius:50%;background:#fff;
  border:3px solid #2F6BFF;overflow:hidden}
 .tut .av svg{width:100%;height:100%;display:block}
-.tut .mock{position:absolute;left:128px;right:62px;top:370px;min-height:900px;max-height:1180px;display:flex;flex-direction:column;border-radius:20px;background:#fff;
+.tut .mock{position:absolute;left:128px;right:62px;top:390px;min-height:700px;max-height:1100px;display:flex;flex-direction:column;border-radius:20px;background:#fff;
  border:1.5px solid rgba(0,0,0,.08);box-shadow:0 12px 34px rgba(60,50,30,.12);overflow:hidden}
 .tut .mock .bar{height:52px;flex-shrink:0;background:#F3F0E5;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:8px;padding:0 18px}
 .tut .mock .bar i{width:10px;height:10px;border-radius:50%;background:#D9D4C5;display:block}
@@ -124,7 +124,7 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
 .tut .bub{max-width:90%;padding:18px 22px;border-radius:16px;font-size:29px;line-height:1.4;opacity:0;margin-bottom:12px}
 .tut .bub.q{background:#EEF2FF;color:#1D1D1D}
 .tut .bub.a{background:#F4F1E6;color:#2A2F3A;margin-left:auto}
-.tutcap{position:absolute;left:74px;right:74px;top:1330px;font-size:32px;color:#3A4452;font-weight:600;text-align:center}
+.tutcap{position:absolute;left:74px;right:74px;top:1130px;font-size:32px;color:var(--muted);font-weight:600;text-align:center}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
 """
 
@@ -677,8 +677,9 @@ def build(spec, cues, path):
     pal = PALETTES.get(getattr(spec, 'palette', 'teal'), PALETTES['teal'])
     bgstyle = getattr(spec, 'bgstyle', 'mesh')
     ink = '#1D1D1D' if getattr(spec, 'palette', '') == 'paper' else '#E8FBFF'
+    muted = '#6B7280' if getattr(spec, 'palette', '') == 'paper' else 'rgba(232,251,255,.62)'
     root_css = (f":root{{--bg:{pal['bg']};--bg2:{pal['bg2']};--a1:{pal['a1']};"
-                f"--a2:{pal['a2']};--a3:{pal['a3']};--ink:{ink}}}")
+                f"--a2:{pal['a2']};--a3:{pal['a3']};--ink:{ink};--muted:{muted}}}")
     board_css = board_mod.BOARD_CSS.replace('__FONT__', board_mod.assets()['font'])
     paper = getattr(spec, 'palette', '') == 'paper'
     extra_css = PAPER_CSS if paper else ''
