@@ -99,6 +99,32 @@ html,body{width:__W__px;height:__H__px;overflow:hidden;background:var(--bg);
 .mascot{position:absolute;left:40px;bottom:205px;width:262px;opacity:0;z-index:5;transform-origin:50% 100%;transition:transform .35s ease}
 .mascot svg{width:100%;height:auto;display:block;overflow:visible}
 .mascot g{transition:transform .35s ease}
+.tut{position:absolute;inset:0}
+.tut .head{position:absolute;left:74px;right:74px;top:96px;font-size:66px;font-weight:800;line-height:1.06;color:#9AA1AC;letter-spacing:-.01em}
+.tut .head b{color:#1D1D1D}
+.tut .rail{position:absolute;left:98px;top:330px;height:0;width:4px;background:rgba(47,107,255,.22);border-radius:2px}
+.tut .dot{position:absolute;left:76px;top:326px;width:46px;height:46px;border-radius:50%;background:#2F6BFF;color:#fff;
+ font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(47,107,255,.35)}
+.tut .av{position:absolute;left:142px;top:316px;width:66px;height:66px;border-radius:50%;background:#fff;
+ border:3px solid #2F6BFF;overflow:hidden}
+.tut .av svg{width:100%;height:100%;display:block}
+.tut .mock{position:absolute;left:128px;right:62px;top:370px;min-height:900px;max-height:1180px;display:flex;flex-direction:column;border-radius:20px;background:#fff;
+ border:1.5px solid rgba(0,0,0,.08);box-shadow:0 12px 34px rgba(60,50,30,.12);overflow:hidden}
+.tut .mock .bar{height:52px;flex-shrink:0;background:#F3F0E5;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:8px;padding:0 18px}
+.tut .mock .bar i{width:10px;height:10px;border-radius:50%;background:#D9D4C5;display:block}
+.tut .mock .bar span{margin-left:8px;font-size:18px;color:#7A8391}
+.tut .cur{display:inline-block;width:12px;height:24px;background:#5CE1A6;margin-left:6px;vertical-align:-4px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.tut .mock .body{padding:32px 30px;flex:1;overflow:hidden}
+.tut .ml{font-size:31px;line-height:1.5;color:#1D1D1D;opacity:0;margin-bottom:10px}
+.tut .ml.mono{font-family:'DejaVu Sans Mono',monospace;font-size:27px;color:#16233D}
+.tut .ml .p{color:#2F6BFF;font-weight:700}
+.tut .row{display:flex;align-items:center;gap:16px;font-size:31px;color:#1D1D1D;opacity:0;margin-bottom:14px}
+.tut .row .ic{width:40px;height:34px;background:#4D6BFE;border-radius:6px;flex-shrink:0}
+.tut .bub{max-width:90%;padding:18px 22px;border-radius:16px;font-size:29px;line-height:1.4;opacity:0;margin-bottom:12px}
+.tut .bub.q{background:#EEF2FF;color:#1D1D1D}
+.tut .bub.a{background:#F4F1E6;color:#2A2F3A;margin-left:auto}
+.tutcap{position:absolute;left:74px;right:74px;top:1330px;font-size:32px;color:#3A4452;font-weight:600;text-align:center}
 .fnote{position:absolute;left:0;right:0;top:1120px;text-align:center;font-size:32px;color:#7FB3C4}
 """
 
@@ -134,6 +160,13 @@ body.paper .splitL{top:700px}
 body.paper .splitR{top:742px}
 body.paper .typo{top:640px}
 """
+
+AVATAR = ('<svg viewBox="0 0 120 120"><rect x="10" y="26" width="100" height="66" rx="20" fill="#0B1220" '
+          'stroke="#2F6BFF" stroke-width="5"/><rect x="24" y="38" width="72" height="40" rx="12" fill="#050A12"/>'
+          '<circle cx="46" cy="58" r="8" fill="#8FD0FF"/><circle cx="74" cy="58" r="8" fill="#8FD0FF"/>'
+          '<path d="M48 70 q12 8 24 0" stroke="#8FD0FF" stroke-width="4" fill="none" stroke-linecap="round"/>'
+          '<line x1="60" y1="26" x2="60" y2="10" stroke="#2F6BFF" stroke-width="5"/>'
+          '<circle cx="60" cy="8" r="6" fill="#FF7A3D"/></svg>')
 
 MARKUP = {
     'hook': '<div class="kicker">{kicker}</div>'
@@ -326,6 +359,19 @@ window.setTime=function(t){
         el.style.opacity=p.toFixed(2);
         document.getElementById('s'+i+'l'+k).style.opacity=p.toFixed(2);
       });
+    } else if(s.kind==='step'){
+      const h=document.getElementById('s'+i+'h');
+      if(h) h.style.opacity=ease((lt-0.02)/0.35);
+      const rail=document.getElementById('s'+i+'rail');
+      if(rail) rail.style.height=(ease(lt/1.1)*880).toFixed(0)+'px';
+      const dot=document.getElementById('s'+i+'dot'), mk=document.getElementById('s'+i+'mock');
+      const pd=ease((lt-0.15)/0.3);
+      if(dot){dot.style.opacity=pd;dot.style.transform='scale('+(0.7+0.3*pd).toFixed(2)+')';}
+      if(mk){mk.style.opacity=ease((lt-0.2)/0.35);mk.style.transform='translateY('+((1-ease((lt-0.2)/0.35))*24).toFixed(1)+'px)';}
+      for(let k=0;k<(s.rows||0);k++){
+        const el=document.getElementById('s'+i+'m'+k);
+        if(el) el.style.opacity=ease((lt-0.35-k*0.28)/0.3);
+      }
     } else if(s.kind==='cards'){
       s.items.forEach(function(it,k){
         const p=ease((lt-0.05-k*0.35)/0.45);
@@ -456,7 +502,7 @@ def build(spec, cues, path):
         cap = sc.cap or (sc.say if len(sc.say) <= 70 else sc.say[:67].rsplit(' ', 1)[0] + '…')
         if sc.kind == 'final' and cap.strip().lower() == str(sc.data.get('address', '')).lower():
             cap = ''
-        if cap:
+        if cap and sc.kind != 'step':
             caps.append([round(a, 3), round(end - 0.05, 3), cap])
 
         if sc.kind == 'hook':
@@ -583,6 +629,33 @@ def build(spec, cues, path):
                              f'<div class="statl" id="s{i}l{k}" style="top:{top + 170}px">{_esc(it.get("label", ""))}</div>')
             scenes_js[-1]['items'] = parsed
             m = ''.join(parts) + f'<div class="ghostline"></div><div class="ghost" style="font-size:{_ghost_size(spec.title)}px">{_esc(spec.title.upper())}</div>'
+        elif sc.kind == 'step':
+            n = str(sc.data.get('n', '')).strip()
+            head = str(sc.data.get('head', '')).strip()
+            accent = str(sc.data.get('accent', '')).strip()
+            mock = str(sc.data.get('mock', 'window')).strip()
+            lines = [str(x) for x in (sc.data.get('lines') or [])][:5]
+            title = str(sc.data.get('title', '') or ('terminal' if mock == 'terminal' else 'окно'))
+            if mock == 'terminal':
+                body = ''.join(f'<div class="ml mono" id="s{i}m{k}"><span class="p">$</span> {_esc(x)}</div>'
+                               for k, x in enumerate(lines))
+            elif mock == 'chat':
+                body = ''.join(f'<div class="bub {"q" if k % 2 == 0 else "a"}" id="s{i}m{k}">{_esc(x)}</div>'
+                               for k, x in enumerate(lines))
+            elif mock == 'folder':
+                body = ''.join(f'<div class="row" id="s{i}m{k}"><div class="ic"></div><div>{_esc(x)}</div></div>'
+                               for k, x in enumerate(lines))
+            else:
+                body = ''.join(f'<div class="ml" id="s{i}m{k}">{_esc(x)}</div>' for k, x in enumerate(lines))
+            h = f'{_esc(head)} <b>{_esc(accent)}</b>' if head or accent else ''
+            m = (f'<div class="tut"><div class="head" id="s{i}h">{h}</div>'
+                 f'<div class="rail" id="s{i}rail"></div>'
+                 f'<div class="dot" id="s{i}dot">{_esc(n)}</div>'
+                 f'<div class="av">{AVATAR}</div>'
+                 f'<div class="tutcap">{_esc(sc.cap or "")}</div>'
+                 f'<div class="mock" id="s{i}mock"><div class="bar"><i></i><i></i><i></i>'
+                 f'<span>{_esc(title)}</span></div><div class="body">{body}</div></div></div>')
+            scenes_js[-1]['rows'] = len(lines)
         elif sc.kind == 'cards':
             items = sc.data.get('items', [])[:3]
             parsed = [{'title': it.get('title', ''), 'text': it.get('text', '')} for it in items]

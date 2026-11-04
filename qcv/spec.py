@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'type', 'split', 'film', 'code', 'diagram', 'verdict', 'final'}
+SCENE_TYPES = {'hook', 'stats', 'cards', 'board', 'steps', 'type', 'split', 'film', 'code', 'diagram', 'verdict', 'final', 'step'}
 # Короткое имя слоя — anim. board и wb оставлены для совместимости.
 ALIASES = {'anim': 'board', 'wb': 'board'}
 
@@ -55,8 +55,8 @@ def load(path: str) -> Spec:
         raise ValueError('в спецификации нет сцен')
     if scenes[-1].kind != 'final':
         raise ValueError('последняя сцена должна быть final')
-    if scenes[0].kind not in {'hook', 'type'}:
-        raise ValueError('первая сцена должна быть hook или type')
+    if scenes[0].kind not in {'hook', 'type', 'step'}:
+        raise ValueError('первая сцена должна быть hook, type или step')
 
     return Spec(
         slug=raw['slug'],
